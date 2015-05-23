@@ -44,7 +44,7 @@
             console.log(data);
         }); */
 
-       //scope variables
+       //scope variables starts
        $scope.bugId = "naveen";
        $scope.bugName = "";
        $scope.projectName = "";
@@ -53,6 +53,7 @@
        $scope.teamMember = "";
        $scope.status = "";
        $scope.comments = "";
+       //scope variables ends
 
        console.log("In the bug Menu controller");
        $scope.showInstructions = true;
