@@ -1,0 +1,31 @@
+<!--<!DOCTYPE HTML>
+<html lang='en'>
+
+ <head>
+   <link rel="stylesheet" type="text/css" href="../CSS//bootstrap.css">
+   <link rel="stylesheet" type="text/css" href="../CSS/CustomStyleSheet.css">
+ </head>
+
+ <body>-->
+
+    <div ng-controller="bugMenuController">
+    <ul class="list-inline">
+      <li><a ui-sref=".listBugs"><button type="button" class="btn btn-primary" ng-click="listBugs()">Bugs</button></a></li>
+      <li><a ui-sref=".addBug"><button type="button" class="btn btn-primary" ng-click="addBug()">Add Bug</button></a></li>
+      <li><a ui-sref=".searchBug"><button type="button" class="btn btn-primary ng-click="searchBug()">Search Bug</button></a></li>
+    </ul>
+    <div ui-view></div>
+    <div class="instructions" ng-show = "showInstructions">
+    	Instruction
+    	<ul>
+    		<li>Please lick on the <mark><strong>Bugs</strong></mark> button to view list of bugs. </li>
+    		<li>Please lick on the <mark><strong>Add Bugs</strong></mark> button to view create new bug. </li>
+    		<li>Please lick on the <mark><strong>Search</strong></mark> button to search for a bug. </li>
+    	</ul>
+    </div>
+    </div> 
+
+<!--
+ </body>
+ </html>
+-->
