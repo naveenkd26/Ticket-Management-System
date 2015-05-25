@@ -1,18 +1,9 @@
-<!--<!DOCTYPE HTML>
-<html lang='en'>
-
- <head>
-   <link rel="stylesheet" type="text/css" href="../CSS//bootstrap.css">
-   <link rel="stylesheet" type="text/css" href="../CSS/CustomStyleSheet.css">
- </head>
-
- <body>-->
 
     <div ng-controller="bugMenuController">
     <ul class="list-inline">
       <li><a ui-sref=".listBugs"><button type="button" class="btn btn-primary" ng-click="listBugs()">Bugs</button></a></li>
       <li><a ui-sref=".addBug"><button type="button" class="btn btn-primary" ng-click="addBug()">Add Bug</button></a></li>
-      <li><a ui-sref=".searchBug"><button type="button" class="btn btn-primary ng-click="searchBug()">Search Bug</button></a></li>
+      <li><a ui-sref=".searchBug"><button type="button" class="btn btn-primary" ng-click="searchBug()">Search Bug</button></a></li>
     </ul>
     <div ui-view></div>
     <div class="instructions" ng-show = "showInstructions">
@@ -24,8 +15,3 @@
     	</ul>
     </div>
     </div> 
-
-<!--
- </body>
- </html>
--->

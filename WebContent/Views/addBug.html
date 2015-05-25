@@ -1,14 +1,5 @@
-<!DOCTYPE HTML>
-<html lang='en'>
-
- <head>
-   <link rel="stylesheet" type="text/css" href="../CSS//bootstrap.css">
-   <link rel="stylesheet" type="text/css" href="../CSS/CustomStyleSheet.css">
- </head>
-
- <body>
  	
-
+<div ng-controller = "addNewBugController">
 <table class="newBugTableProps" border="0" cellpadding="10">
 	<tr class="tableRow">
 		<td width="30%"><label for="bugId">Bug id#</label></td>
@@ -68,11 +59,10 @@
 		<td width="40%"><textarea class="form-control" rows="3" ng-model = "comments"></textarea></td>
 	</tr>
 		<tr class="tableRow">
-		<td colspan="2"><button type="button" id="addBug"class="btn btn-primary button-center">Add Bug</button>&nbsp&nbsp&nbsp<button type="button" id="reset"class="btn btn-primary button-center">Reset</button></td>
+		<td colspan="2"><button type="button" ng-click="addNewBug()" class="btn btn-primary button-center">Add Bug</button>&nbsp&nbsp&nbsp<button type="button" ng-click="resetBugDetails()" class="btn btn-primary button-center">Reset</button></td>
 	</tr>
 
 
 </table>
+</div>
 
- </body>
- </html>

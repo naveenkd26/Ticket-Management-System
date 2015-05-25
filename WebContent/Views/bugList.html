@@ -1,29 +1,28 @@
-<!DOCTYPE HTML>
-<html lang='en'>
-
- <head>
-   <link rel="stylesheet" type="text/css" href="../CSS/bootstrap.css">
-   <link rel="stylesheet" type="text/css" href="../CSS/CustomStyleSheet.css">
- </head>
-
- <body>
- 	
-
-<table width="100%" border="1">
 	
-
+<div ng-controller = "bugListController">
+<table width="100%" border="1" cellspacing="30">
+	
 <tr>
 	<th class="bugDetailRow1">Bug id#</th>
 	<th class="bugDetailRow2">Name</th>
 	<th class="bugDetailRow1">Project</th>
-	<th class="bugDetailRow1">Category</th>
+	<th class="bugDetailRow3">Category</th>
 	<th class="bugDetailRow1">Priority</th>
 	<th class="bugDetailRow1">Assigned to</th>
 	<th class="bugDetailRow1">Status</th>
 	<th class="bugDetailRow2">Comments</th>
 </tr>
+<tr ng-repeat = "eachIssue in issueList">
+	<td class="bugDetailRow1">{{eachIssue.bugId}}</td>
+	<td class="bugDetailRow2">{{eachIssue.bugName}}</td>
+	<td class="bugDetailRow1">{{eachIssue.projectName}}</td>
+	<td class="bugDetailRow3">{{eachIssue.category}}</td>
+	<td class="bugDetailRow1">{{eachIssue.priority}}</td>
+	<td class="bugDetailRow1">{{eachIssue.teamMember}}</td>
+	<td class="bugDetailRow1">{{eachIssue.status}}</td>
+	<td class="bugDetailRow2">{{eachIssue.comments}}</td>
+</tr>
 	
 </table>
 
- </body>
- </html>
+</div>
