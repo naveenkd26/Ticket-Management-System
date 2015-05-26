@@ -1,6 +1,6 @@
 	
 <div ng-controller = "bugListController">
-<table width="100%" border="1" cellspacing="30">
+<table width="100%" class="bugListTable">
 	
 <tr>
 	<th class="bugDetailRow1">Bug id#</th>
@@ -11,6 +11,7 @@
 	<th class="bugDetailRow1">Assigned to</th>
 	<th class="bugDetailRow1">Status</th>
 	<th class="bugDetailRow2">Comments</th>
+	<th class="bugDetailRow1"></th>
 </tr>
 <tr ng-repeat = "eachIssue in issueList">
 	<td class="bugDetailRow1">{{eachIssue.bugId}}</td>
@@ -21,8 +22,9 @@
 	<td class="bugDetailRow1">{{eachIssue.teamMember}}</td>
 	<td class="bugDetailRow1">{{eachIssue.status}}</td>
 	<td class="bugDetailRow2">{{eachIssue.comments}}</td>
+	<td class="bugDetailRow1"><a ui-sref = ".updateBug"><button type="button" class="btn btn-primary update-bug">Update</button></a></td>
 </tr>
-	
+	<!--  ng-click="updateBug(eachIssue.bugId)" -->
 </table>
-
+<div ui-view></div>
 </div>

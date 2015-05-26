@@ -119,19 +119,37 @@ footer{
 /*Setting the column width details for bug details table. */
 .bugDetailRow1{
     width="10%";
-    text-align: center;
+    text-align: left;
+    border: 1px solid #999;
+    padding: 0.5rem;
 }
 
 .bugDetailRow2{
     width="20%";
-    text-align: center;
+    text-align: left;
+    border: 1px solid #999;
+    padding: 0.5rem;
 }
 
 .bugDetailRow3{
     width="15%";
-    text-align: center;
+    text-align: left;
+    border: 1px solid #999;
+    padding: 0.5rem;
 }
+
+.bugListTable th{
+	text-align:center;
+}
+
+.update-bug{
+    width:70px;
+	height:30px;
+}
+
 
 /*table{
 	table-layout: fixed;
 }*/
+
+

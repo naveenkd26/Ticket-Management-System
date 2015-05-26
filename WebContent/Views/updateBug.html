@@ -1,0 +1,68 @@
+ 	
+<div ng-controller = "updateBugController">
+<table class="newBugTableProps" border="0" cellpadding="10">
+	<tr class="tableRow">
+		<td width="30%"><label for="bugId">Bug id#</label></td>
+		<td width="40%"><input ng-model = "bugId" type="text" class="form-control"  placeholder="" ng-disabled = "true"></td>
+	</tr>
+	<tr class="tableRow">
+		<td width="30%"><label for="bugName">Name</label></td>
+		<td width="40%"><input type="text" class="form-control" ng-model = "bugName" placeholder="" ng-disabled = "true"></td>
+	</tr>
+	<tr class="tableRow">
+		<td width="30%"><label for="projectName">Project</label></td>
+		<td width="40%"><select class="form-control" ng-model = "projectName">
+			<option>Project Alpha</option>
+			<option>Project Motion</option>
+			<option>Project Newton</option>
+		</select></td>
+	</tr>
+	<tr class="tableRow">
+		<td width="30%"><label for="category">Category</label></td>
+		<td width="40%"><select class="form-control" ng-model = "category">
+			<option>Internal Issues</option>
+			<option>Production Issue</option>
+			<option>Design Issue</option>
+			<option>Incomplete Requirements</option>
+		</select></td>
+	</tr>
+	<tr class="tableRow">
+		<td width="30%"><label for="priority">Priority</label></td>
+		<td width="40%"><select class="form-control" ng-model = "priority">
+			<option>Low</option>
+			<option>Medium</option>
+			<option>High</option>
+			<option>Critical</option>
+		</select></td>
+	</tr>
+	<tr class="tableRow">
+		<td width="30%"><label for="teamMember">Assigned to</label></td>
+		<td width="40%"><select class="form-control" ng-model = "teamMember">
+			<option>John Doe</option>
+			<option>Wendy Kim</option>
+			<option>John Baartz</option>
+			<option>Michael Boltz</option>
+		</select></td>
+	</tr>
+	<tr class="tableRow">
+		<td width="30%"><label for="status">Status</label></td>
+		<td width="40%"><select class="form-control" ng-model = "status">
+			<option>New</option>
+			<option>Resolved in Local</option>
+			<option>Testing</option>
+			<option>Pushed to Dev</option>
+			<option>Pushed to Live</option>
+		</select></td>
+	</tr>
+	<tr class="tableRow">
+		<td width="30%"><label for="description">Comments</label></td>
+		<td width="40%"><textarea class="form-control" rows="3" ng-model = "comments"></textarea></td>
+	</tr>
+		<tr class="tableRow">
+		<td colspan="2"><button type="button" ng-click="updateBug()" class="btn btn-primary button-center">Add Bug</button>&nbsp&nbsp&nbsp<button type="button" ng-click="resetBugDetails()" class="btn btn-primary button-center">Reset</button></td>
+	</tr>
+
+
+</table>
+</div>
+

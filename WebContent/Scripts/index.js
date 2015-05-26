@@ -1,8 +1,9 @@
 (function(){
-    console.log("In the closire function Naveen kumar......");
+
+  console.log("Angular compiling starts.");
 	var myApp = angular.module('ticketSystemApp', ["ui.router"]);
      
-     //Routing for the nested views. - Starts
+     //Routing for the nested views starts.
      myApp.config(function($stateProvider, $urlRouterProvider){
 
       $urlRouterProvider.otherwise("/adminOptions");
@@ -24,7 +25,12 @@
           })
         .state('userOptions.searchBug', {
               url: "/searchBug",
-              templateUrl: "route1.list.html",
+              templateUrl: "",
+          })
+        .state('userOptions.listBugs.updateBug', {
+              url: "/updateBug",
+              templateUrl: "updateBug.html",
+              controller: "updateBugController",
           })
         .state('userOptions', {
               url: "/userOptions",
@@ -33,18 +39,18 @@
         .state('adminOptions', {
               url: "/adminOptions",
               templateUrl: "adminOptions.html",
-          })
+          })     
 
      });
-     //Routing for the nested views. - Ends
+     //Routing for the nested views ends.
 
-     //bugMenuController - Starts
+
+    // bugMenuController starts.
      myApp.controller("bugMenuController", ['$scope', 'bugRepository', 'bugObject', function($scope, bugRepository, bugObject){
 
        //console.log("In the bug Menu controller");
        $scope.showInstructions = true;
        
-
        //Handling bugMenu events.
        $scope.listBugs = function(){
           console.log("List Bugs button clicked");
@@ -52,12 +58,11 @@
        };
        
        //Function whick gets triggered when AddBug option is selected. 
-       $scope.addBug = function(){
-         
+       $scope.addBug = function(){        
           console.log("Add Bug button clicked");
           $scope.hideInstruction();
-
        };
+
        $scope.searchBug = function(){
           console.log(" Search Bug button clicked");
           $scope.hideInstruction();
@@ -66,15 +71,13 @@
        //Function to hide the instructions in the bugMenu view.
        $scope.hideInstruction = function hideInstructions(){
         $scope.showInstructions  = false;
-       };
+        };
 
      }]);
-     //bugMenuController - Ends
+    // bugMenuController ends.
 
-     //Writing services
-     //Nice article about callback func
-     //http://javascriptissexy.com/understand-javascript-callback-functions-and-use-them/
-     //Repository class starts.
+
+     // Repository class which makes all the REST calls starts.
      myApp.factory("bugRepository", ['$http', function($http){
 	 
       return { 
@@ -104,9 +107,10 @@
                       } 
       };    	
     }]);
-    //Repository class ends.
+    // Repository class which makes all the REST calls ends.
 
-    //Service which returns an Bug Object starts.
+
+    // Service which returns an Bug Object starts.
     myApp.factory("bugObject", function(){
       return function(){
       this.bugId = "naveen";
@@ -119,11 +123,10 @@
       this.comments = "";
       };
     });
-   //Service which returns an Bug Object ends.
+   // Service which returns Bug Object ends.
 
    
-   /****************Add New Bug controller starts*****************/
-   /**************************************************************/
+   // addNewBugController starts.
    myApp.controller("addNewBugController", ['$scope', 'bugRepository', 'bugObject', function($scope, bugRepository, bugObject){
     
        //scope variables starts
@@ -137,8 +140,7 @@
        $scope.comments = "";
        //scope variables ends
 
-       //console.log("This is in Add new bug controller....");
-   
+       //console.log("This is in Add new bug controller....");   
        $scope.addNewBug = function(){
           console.log("Adding new bug to the DB.");
           //$scope.hideInstruction();
@@ -172,10 +174,10 @@
      };
 
    }]);
-  /****************Add New Bug controller ends*****************/
+  // addNewBugController ends.
 
-  /****************Bug list controller starts*****************/
-  /************************************************************/
+
+  // bugListController starts.
   myApp.controller("bugListController", ['$scope', function($scope){
     
     $scope.issueList = [
@@ -185,11 +187,22 @@
          {"bugId":"1898","bugName":"Test 4","projectName":"Project Alpha","category":"Internal Issues","priority":"Low","teamMember":"Wendy Kim","status":"Testing","comments":"WIll be pushed to DEV."},
          {"bugId":"1678","bugName":"Test 5","projectName":"Project Motion","category":"Design Issue","priority":"High","teamMember":"John Doe","status":"New","comments":"This is a Dev Blocker."}
       ];
-    console.log("In bug list controller.");
-     
+    
+    /*$scope.updateBug = function(bugId){
+    	console.log("The selected BugId is:::::::::::::  "+ bugId);
+      }*/
+  }]);
+  // bugListController ends.
+
+
+  // updateBugcontroller starts
+  myApp.controller("updateBugController", ['$scope','$stateParams', function($scope, $stateParams){
+    
+    console.log("Bug Id :  "+ $stateParams.bugId);   
+	  //console.log("(updateBug controller)The selected BugId is:  "+ $stateParams.bugId);
 
   }]);
-  /****************Bug list controller starts*****************/
+  // updateBugcontroller ends.
 
 
 })();
