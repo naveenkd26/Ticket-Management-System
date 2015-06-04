@@ -13,6 +13,18 @@
             url: "/bugMenu",
             templateUrl: "bugMenu.html"
         })
+
+        .state('userOptions', {
+              url: "/userOptions",
+              templateUrl: "bugMenu.html",
+              controller: "bugMenuController"
+          }) 
+        .state('adminOptions', {
+              url: "/adminOptions",
+              templateUrl: "adminOptions.html",
+              controller: "adminOptionsController"
+          })
+
         .state('userOptions.listBugs', {
               url: "/listBugs",
               templateUrl: "bugList.html",
@@ -27,19 +39,30 @@
               url: "/searchBug",
               templateUrl: "",
           })
-        .state('userOptions.listBugs.updateBug', {
-              url: "/updateBug",
+        //State for the updateBug.html view from listBugs.html view (Navigating source).
+        //Putting the view in the place holder present in bugMenu.html
+        .state('bugMenu.updateBug', {
+              url: "/updateBug/:bugId",
               templateUrl: "updateBug.html",
               controller: "updateBugController",
-          })
-        .state('userOptions', {
-              url: "/userOptions",
-              templateUrl: "bugMenu.html",
-          })
-        .state('adminOptions', {
-              url: "/adminOptions",
-              templateUrl: "adminOptions.html",
-          })     
+              onEnter: function(){
+                 console.log("This is in updateBug onEnter state.");
+              }
+          })        
+        //States to navigate back to listBugs, addBug sections from updateBug view using bugMenu options.
+        //Reason: Once we enter into the updateBug view, the state changes from userOptions state to bugMenu state,
+        //any navigation in this phase would result in navigation from the current base state bugMenu but not from
+        //userOptions which will result in routing error.
+        .state('bugMenu.listBugs', {
+              url: "/listBugs",
+              templateUrl: "bugList.html",
+              controller: "bugListController"
+          }) 
+        .state('bugMenu.addBug', {
+              url: "/addBug",
+              templateUrl: "addBug.html",
+              controller: "addNewBugController",
+          })      
 
      });
      //Routing for the nested views ends.
@@ -48,9 +71,9 @@
     // bugMenuController starts.
      myApp.controller("bugMenuController", ['$scope', 'bugRepository', 'bugObject', function($scope, bugRepository, bugObject){
 
-       //console.log("In the bug Menu controller");
-       $scope.showInstructions = true;
-       
+       console.log("In the bug Menu controller");
+      
+        $scope.showInstructions = true;
        //Handling bugMenu events.
        $scope.listBugs = function(){
           console.log("List Bugs button clicked");
@@ -81,30 +104,66 @@
      myApp.factory("bugRepository", ['$http', function($http){
 	 
       return { 
-    	   addBug: function(newBug, callback){
+    	   addBug: function(newBugObject, callback){
                         
-                        console.log("This is in the bugrepo addBug function.");
-
-                        $http.get('http://localhost:8080/TicketSystem/rest/getData/greetMessage')
+                        console.log("This is in addBug bugRepo function.");
+                        console.log("Below are the new bug details.");
+                        console.log(JSON.stringify(newBugObject));
+                        /*$http.get('http://localhost:8080/TicketSystem/rest/getData/greetMessage')
                          .success(function(data, status, headers, config) {
                                //console.log("This is in rest call success function");
                                callback(data); 
                           }).error(function(data, status, headers, config) {
                                console.log("addBug web call failed.");
-                          });
-
+                          });*/
+                  },
+        updateBug: function(bugObject, callback){
+                        
+                        console.log("This is in update bugRepo function.");
+                        console.log("Below are the update bug details.");
+                        console.log(JSON.stringify(bugObject));
+                        /*$http.get('http://localhost:8080/TicketSystem/rest/getData/greetMessage')
+                         .success(function(data, status, headers, config) {
+                               //console.log("This is in rest call success function");
+                               callback(data); 
+                          }).error(function(data, status, headers, config) {
+                               console.log("addBug web call failed.");
+                          });*/
                   },
 
          getBugList: function(callback){
 
-                        $http.get('http://localhost:8080/TicketSystem/rest/getData/greetMessage')
+                         console.log("This is in getBugLis bugRepo function.");
+                        /*$http.get('http://localhost:8080/TicketSystem/rest/getData/greetMessage')
                          .success(function(data, status, headers, config) {
                                //console.log("This is in rest call success function");
                                callback(data); 
                           }).error(function(data, status, headers, config) {
                                console.log("addBug web call failed.");
-                          });
-                      } 
+                          });*/
+                          var data = [ {"bugId":"1234","bugName":"Naveen","projectName":"Project Newton","category":"Production Issue","priority":"Medium","teamMember":"John Baartz","status":"Testing","comments":""},
+                                       {"bugId":"1345","bugName":"Test 2","projectName":"Project Motion","category":"Incomplete Requirements","priority":"Critical","teamMember":"John Doe","status":"New","comments":"Need ASAP."},
+                                       {"bugId":"1451","bugName":"Test 3","projectName":"Project Alpha","category":"Production Issue","priority":"Medium","teamMember":"Michael Boltz","status":"Testing","comments":"Need immediate action."},
+                                       {"bugId":"1898","bugName":"Test 4","projectName":"Project Alpha","category":"Internal Issues","priority":"Low","teamMember":"Wendy Kim","status":"Testing","comments":"WIll be pushed to DEV."},
+                                       {"bugId":"1678","bugName":"Test 5","projectName":"Project Motion","category":"Design Issue","priority":"High","teamMember":"John Doe","status":"New","comments":"This is a Dev Blocker."}
+                                     ];
+                          callback(data);           
+                      }, 
+
+        getBugDetails: function(bugId, callback){
+
+                         console.log("This is in getBugDetails bugRepo function. BugId:  " + bugId);       
+        	            /*$http.get('http://localhost:8080/TicketSystem/rest/getData/greetMessage')
+                         .success(function(data, status, headers, config) {
+                               //console.log("This is in rest call success function");
+                               callback(data); 
+                          }).error(function(data, status, headers, config) {
+                               console.log("addBug web call failed.");
+                          });*/
+                        var data = '{"bugId":"1678","bugName":"Test 5","projectName":"Project Motion","category":"Design Issue","priority":"High","teamMember":"John Doe","status":"New","comments":"This is a Dev Blocker."}';
+                        callback(data);
+
+                      }
       };    	
     }]);
     // Repository class which makes all the REST calls ends.
@@ -140,27 +199,27 @@
        $scope.comments = "";
        //scope variables ends
 
-       //console.log("This is in Add new bug controller....");   
+       console.log("This is in Add new bug controller....");   
        $scope.addNewBug = function(){
-          console.log("Adding new bug to the DB.");
+          //console.log("Adding new bug to the DB.");
           //$scope.hideInstruction();
  
           //Creating Bug object
-          var newBug = new bugObject();
-          newBug.bugId = $scope.bugId;
-          newBug.bugName = $scope.bugName;
-          newBug.projectName = $scope.projectName;
-          newBug.category = $scope.category;
-          newBug.priority = $scope.priority;
-          newBug.teamMember = $scope.teamMember;
-          newBug.status = $scope.status;
-          newBug.comments = $scope.comments;
+          var newBugObject = new bugObject();
+          newBugObject.bugId = $scope.bugId;
+          newBugObject.bugName = $scope.bugName;
+          newBugObject.projectName = $scope.projectName;
+          newBugObject.category = $scope.category;
+          newBugObject.priority = $scope.priority;
+          newBugObject.teamMember = $scope.teamMember;
+          newBugObject.status = $scope.status;
+          newBugObject.comments = $scope.comments;
 
-          console.log(JSON.stringify(newBug));
-          /*bugRepository.addBug(newBug,function(data){
-            console.log("This is in the callback function.");
+          //console.log(JSON.stringify(newBug));
+          bugRepository.addBug(newBugObject,function(data){
+            //console.log("This is in the callback function.");
             //console.log(data);
-          });*/
+          });
      };
 
      $scope.resetBugDetails = function(){
@@ -178,15 +237,13 @@
 
 
   // bugListController starts.
-  myApp.controller("bugListController", ['$scope', function($scope){
+  myApp.controller("bugListController", ['$scope', 'bugRepository', function($scope, bugRepository){
     
-    $scope.issueList = [
-         {"bugId":"1234","bugName":"Naveen","projectName":"Project Newton","category":"Production Issue","priority":"Medium","teamMember":"John Baartz","status":"Testing","comments":""},
-         {"bugId":"1345","bugName":"Test 2","projectName":"Project Motion","category":"Incomplete Requirements","priority":"Critical","teamMember":"John Doe","status":"New","comments":"Need ASAP."},
-         {"bugId":"1451","bugName":"Test 3","projectName":"Project Alpha","category":"Production Issue","priority":"Medium","teamMember":"Michael Boltz","status":"Testing","comments":"Need immediate action."},
-         {"bugId":"1898","bugName":"Test 4","projectName":"Project Alpha","category":"Internal Issues","priority":"Low","teamMember":"Wendy Kim","status":"Testing","comments":"WIll be pushed to DEV."},
-         {"bugId":"1678","bugName":"Test 5","projectName":"Project Motion","category":"Design Issue","priority":"High","teamMember":"John Doe","status":"New","comments":"This is a Dev Blocker."}
-      ];
+     $scope.showInstructions = false;
+     
+     bugRepository.getBugList(function(resultsBack){
+        $scope.issueList = resultsBack;
+    });
     
     /*$scope.updateBug = function(bugId){
     	console.log("The selected BugId is:::::::::::::  "+ bugId);
@@ -196,13 +253,78 @@
 
 
   // updateBugcontroller starts
-  myApp.controller("updateBugController", ['$scope','$stateParams', function($scope, $stateParams){
+  myApp.controller("updateBugController", ['$scope','$stateParams', 'bugObject', 'bugRepository', function($scope, $stateParams, bugObject, bugRepository){
     
-    console.log("Bug Id :  "+ $stateParams.bugId);   
-	  //console.log("(updateBug controller)The selected BugId is:  "+ $stateParams.bugId);
+    //console.log("Bug Id for which the details are requested:  "+ $stateParams.bugId); 
+    bugRepository.getBugDetails($stateParams.bugId, function(resultsBack){
+    	
+       var data = JSON.parse(resultsBack);
+       //console.log("Bug details received from the server :  + data");
+       $scope.bugId = data.bugId;
+       $scope.bugName = data.bugName;
+       $scope.projectName = data.projectName;
+       $scope.category = data.category;
+       $scope.priority = data.priority;
+       $scope.teamMember = data.teamMember;
+       $scope.status = data.status;
+       $scope.comments = data.comments;
+    });
 
+    $scope.updateBug = function(){
+          //console.log("Adding new bug to the DB.");
+          //$scope.hideInstruction();
+ 
+          //Creating Bug object
+          var bug = new bugObject();
+          bug.bugId = $scope.bugId;
+          bug.bugName = $scope.bugName;
+          bug.projectName = $scope.projectName;
+          bug.category = $scope.category;
+          bug.priority = $scope.priority;
+          bug.teamMember = $scope.teamMember;
+          bug.status = $scope.status;
+          bug.comments = $scope.comments;
+
+          //console.log(JSON.stringify(newBug));
+          bugRepository.updateBug(bug,function(data){
+            //console.log("This is in the callback function.");
+            //console.log(data);
+          });
+      };
+      
   }]);
   // updateBugcontroller ends.
+
+  // userOptionsController starts.
+  myApp.controller("userOptionsController", ['$scope', function($scope){
+
+    console.log("THis is in userOptionsController.");
+
+    $scope.val1 = "true";
+    $scope.val2 = "false";
+
+    $scope.disableUserOptions = function(){
+      console.log("Admin options clicked");
+      $scope.val1 = "true";
+      $scope.val2 = "false";
+    };
+
+    $scope.disableAdminOptions = function(){
+      console.log("User options clicked");
+      $scope.val1 = "false";
+      $scope.val2 = "true";
+    };
+
+  }]);
+  // userOptionsController ends.
+  
+  // adminOptionsController starts.
+  myApp.controller("adminOptionsController", ['$scope', function($scope){
+
+	    console.log("This is in adminOptionsController.");
+
+	  }]);
+  // adminOptionsController ends.
 
 
 })();

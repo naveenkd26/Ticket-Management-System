@@ -22,9 +22,9 @@
 	<td class="bugDetailRow1">{{eachIssue.teamMember}}</td>
 	<td class="bugDetailRow1">{{eachIssue.status}}</td>
 	<td class="bugDetailRow2">{{eachIssue.comments}}</td>
-	<td class="bugDetailRow1"><a ui-sref = ".updateBug"><button type="button" class="btn btn-primary update-bug">Update</button></a></td>
+	<td class="bugDetailRow1"><a href = "#/bugMenu/updateBug/{{eachIssue.bugId}}"><button type="button" class="btn btn-primary update-bug">Update</button></a></td>
 </tr>
 	<!--  ng-click="updateBug(eachIssue.bugId)" -->
 </table>
-<div ui-view></div>
+<!--<div ui-view></div>-->
 </div>

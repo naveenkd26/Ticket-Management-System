@@ -10,80 +10,6 @@
   <!-- UI-Router -->
   <script src="../Scripts/angular-ui-router.js"></script>
   <script src="../Scripts/index.js"></script>
- <!--  <script>
-     var myApp = angular.module('ticketSystemApp', ["ui.router"]);
-     
-     //Routing for the nested views. - Starts
-     myApp.config(function($stateProvider, $urlRouterProvider){
-
-      $urlRouterProvider.otherwise("/adminOptions");
-
-      $stateProvider
-        .state('bugMenu', {
-            url: "/bugMenu",
-            templateUrl: "bugMenu.html"
-        })
-        .state('userOptions.listBugs', {
-              url: "/listBugs",
-              templateUrl: "bugList.html",
-          })
-        .state('userOptions.addBug', {
-              url: "/addBug",
-              templateUrl: "addBug.html",
-          })
-        .state('userOptions.searchBug', {
-              url: "/searchBug",
-              templateUrl: "route1.list.html",
-          })
-        .state('userOptions', {
-              url: "/userOptions",
-              templateUrl: "bugMenu.html",
-          })
-        .state('adminOptions', {
-              url: "/adminOptions",
-              templateUrl: "adminOptions.html",
-          })
-
-     });
-     //Routing for the nested views. - Ends
-
-     //bugMenuController - Starts
-     myApp.controller("bugMenuController", ['$scope','$http', function($scope, $http){
-
-       $http.get('http://localhost:8080/TicketSystem/rest/getData/greetMessage')
-       .success(function(data) {
-            console.log(data);
-        }); 
-
-       console.log("In the bug Menu controller");
-       $scope.showInstructions = true;
-
-       //Handling bugMenu events.
-       $scope.listBugs = function(){
-          console.log("List Bugs button clicked");
-          $scope.hideInstruction();
-       };
-       $scope.addBug = function(){
-          console.log("Add Bug button clicked");
-          $scope.hideInstruction();
-       };
-       $scope.searchBug = function(){
-          console.log(" Search Bug button clicked");
-          $scope.hideInstruction();
-       };
-
-
-       //Function to hide the instructions in the bugMenu view.
-       $scope.hideInstruction = function hideInstructions(){
-        $scope.showInstructions  = false;
-       };
-
-     }]);
-     //bugMenuController - Ends
-
-  </script> -->
-
-
 
  </head>
 
@@ -95,13 +21,13 @@
  </header>  
 
  <!--Main Container-->
- <div class="mainContainer">
+ <div class="mainContainer" ng-controller = "userOptionsController">
       
     <!--Main Container left section-->
     <div class="leftSection">
     <ul class="list-inline">
-      <li><a ui-sref=".adminOptions"><button type="button" class="btn btn-primary">Admin Settings</button></a></li>
-      <li><a ui-sref=".userOptions"><button type="button" class="btn btn-primary">User</button></a></li>
+      <li><a ui-sref=".adminOptions"><button type="button" class="btn btn-primary" >Admin Settings</button></a></li>
+      <li><a ui-sref=".userOptions"><button type="button" class="btn btn-primary" >User</button></a></li>
     </ul>  
     </div>
     
