@@ -19,7 +19,7 @@ public class Bug1 {
 	public String greetMessage(){
 		Gson gson = new Gson();
 				
-		ApplicationContext context = new ClassPathXmlApplicationContext("org/controllers/SpringConfig.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("com/controllers/SpringConfig.xml");
 		String  message = gson.toJson(context.getBean("employeeBean"));
 		//System.out.println(message);
 		return message;

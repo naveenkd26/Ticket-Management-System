@@ -15,6 +15,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     <bean id="utilityBean" class = "com.beans.Utility" scope = "singleton"></bean>
     
     <bean id="mongoDriverBean" class = "com.datalayer.MongoDriver" scope = "singleton">
+    
     <property name="uri" value="mongodb://testuser1:ZxCvBnM@ds037262.mongolab.com:37262/ticketsystemdb"/>
     <property name="collection" value="tickets"/>
     </bean>

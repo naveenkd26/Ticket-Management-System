@@ -65,7 +65,12 @@ public class MongoDriver implements MongoDriverInterface {
         				
 	}
 	
-	public void getBugList(){	
+	public DBCursor getBugList(){
+		
+		DBCursor bugList = collection.find();
+		
+		return bugList;
+		
 	}
 	
 	
@@ -88,10 +93,8 @@ public class MongoDriver implements MongoDriverInterface {
 
 	}
 	
-	
 	public void cleanUpResources(){
-	
-		 //cleaning up resources
+	 	 //cleaning up resources
 		 client.close();	
 	}
 

@@ -82,7 +82,7 @@ public class Bug {
 	public Bug(String bugId, String bugName, String projectName,
 			String category, String priority, String teamMember, String status,
 			String comments) {
-		super();
+
 		this.bugId = bugId;
 		this.bugName = bugName;
 		this.projectName = projectName;

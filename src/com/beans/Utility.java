@@ -14,7 +14,6 @@ import com.mongodb.DBObject;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.lang.reflect.Member;
 import java.lang.reflect.Field;
 
@@ -24,9 +23,13 @@ public class Utility implements UtilityInterface{
 		// TODO Auto-generated constructor stub
 	}
 	
-	//Using HashMap instead of Bug class as parameter in order to avoid any changes to the Bug class
-	//if in future we have to add more details to the new Bug, we don't have to change the Bug class.
-	public BasicDBObject getAddBugDBObject(Map<String, String> bugDetails){
+
+	//Function Name: getAddBugDBObject(Map<String, String> bugDetails)
+	//Parameters   : Map<String, String> which contains bug information in Key-Value pairs. Ex: ("bugId","1834")
+	//Description  : Generate DBObject from the Map. MongoDB API accepts querying only in terms of DBObject.   
+	//Used HashMap instead of Bug class as parameter in order to facilitate any changes to the existing Bug structure,
+	//say adding a new detail ("LastUpdatedBy", "XXX") to bug information just needs adding the detail to HashMap.
+	public BasicDBObject getAddBugDBObject(Map<String, String> bugDetails) throws Exception{
 		
 		BasicDBObject obj = new BasicDBObject();
 		
@@ -34,35 +37,43 @@ public class Utility implements UtilityInterface{
 		for(Map.Entry<String, String> eachDetail : bugDetails.entrySet()){
 			obj.put(eachDetail.getKey(), eachDetail.getValue());
 		}
-			
+		
 		return obj;
 	}
-	
-	public BasicDBObject[] getUpdateBugDBObject(Map<String, String> queryParams, Map<String, String> modifiedDetails){
+    //
+	//
+	//
+	//Function Name: getUpdateBugDBObject(Map<String, String> queryParams, Map<String, String> modifiedDetails)
+	//Parameters   : (Map<String, String>, Map<String, String>)
+	//               1st parameter contains the information about which bug has to be updated,
+	//               2nd parameter contains new details.
+	//Description  : Generate DBObjects from the Map.
+	public BasicDBObject[] getUpdateBugDBObject(Map<String, String> queryParams, Map<String, String> modifiedDetails) throws Exception{
 		
         //Building the object with query parameters.
 		BasicDBObject queryParamsDBObj = new BasicDBObject();
 		
 		for(Map.Entry<String, String> eachDetail : queryParams.entrySet()){
 			queryParamsDBObj.put(eachDetail.getKey(), eachDetail.getValue());
-		}
-		
+		}	
 		//Building the object with new details.
-		BasicDBObject modifiedDetailsDBObj = new BasicDBObject();
-		
+		BasicDBObject modifiedDetailsDBObj = new BasicDBObject();	
 		for(Map.Entry<String, String> eachDetail : modifiedDetails.entrySet()){
 			modifiedDetailsDBObj.put(eachDetail.getKey(), eachDetail.getValue());
 		}
-		
-		
+			
 		BasicDBObject[] updateQueryObj = new BasicDBObject[]{queryParamsDBObj, new BasicDBObject("$set", modifiedDetailsDBObj )};
 		
 		return updateQueryObj;
 	}
-	
-	
+	//
+	//
+	//
 	//DBCursor results = collection.find(new BasicDBObject("issueName", new BasicDBObject("$gt", "1")));
-	public BasicDBObject getFindBugDBObject(Map<String, String> searchParams){
+	//Function Name: getFindBugDBObject(Map<String, String> searchParams)
+	//Parameters   : Map<String, String> which contains information about the bug which has to be searched.
+	//Description  : Generate DBObject from the Map.
+	public BasicDBObject getFindBugDBObject(Map<String, String> searchParams) throws Exception{
 		
 		BasicDBObject obj = new BasicDBObject();
 		
@@ -72,28 +83,89 @@ public class Utility implements UtilityInterface{
 		
 		return obj;
 	}
-	
-	public Bug getBugObjectFromDBCursor(ApplicationContext context, DBCursor dbCursor){
+	//
+	//
+	//
+	//Function Name: getBugObjectsFromDBCursor(ApplicationContext context, DBCursor dbCursor)
+	//Parameters   : (ApplicationContext, DBCursor) ApplicationContext to instantiate new bug object and DBCursor to pull the details from.
+	//Description  : Create Bug objects and return.
+	public List<Bug> getBugObjectsListFromDBCursor(ApplicationContext context, DBCursor dbCursor) throws Exception{
 		 
+		List<Bug> bugList = new <Bug>ArrayList();
+		DBObject doc;
+		//Getting new Bug Object through Spring.
 		Bug bugObj = (Bug)context.getBean("newBugBean");
 			
-		DBObject doc;	
+        //Adding the retrieved details to the new bug object using Java Reflection API.	
 		Field[] fields = bugObj.getClass().getDeclaredFields();	
 		
-		try{
-			
+		try{		
 			while(dbCursor.hasNext()){
+					 
 			  doc = dbCursor.next();
 			  for(Field eachMember : fields)	
 				eachMember.set(bugObj, doc.get(eachMember.getName()));
+			  
+			  bugList.add(bugObj);
+			  bugObj = (Bug)context.getBean("newBugBean");
+
 			}
 		}
 		catch(IllegalAccessException e){
 			e.printStackTrace();
 		}
 
-      return bugObj;
+      return bugList;
+	}
+	//
+	//
+	//
+	//Function Name: getHashMapFromJSON(String jsonData)
+	//Parameters   : (jsonData) jsonData contains the data which will be added to the HashMap.
+	//Description  : Returns the details as HashMap.
+	public Map<String, String> getHashMapFromJSON(String jsonData) throws Exception{
+		 
+		Map<String, String> bugDetailsMap = new <String, String>HashMap();
+		
+		//check whether jsonData has single or multiple "key:value" pairs
+		//because single "key:value" doesn't contain delimiter ',' and will return Null pointer Exception.
+		if(jsonData.contains(",")){
+			     
+			String[] details = jsonData.split(",");
+	        int i, j, k;
+			
+ 	 	   for(String eachDetail : details){
+	      	 i = eachDetail.indexOf("\"");
+	      	bugDetailsMap.put(eachDetail.substring(i+1 , j = eachDetail.indexOf("\"", i+1)), eachDetail.substring((k = eachDetail.indexOf("\"", j+1)) + 1, eachDetail.indexOf("\"", k+1)) );
+	           }
+	 	   
+		}else{
+			//Case for single "key:vale" pair.
+			//Use :when we are sending only bugId for findBugDetails()
+			int j, k;
+			bugDetailsMap.put(jsonData.substring(2, j = jsonData.indexOf("\"", 2)), jsonData.substring( (k= jsonData.indexOf("\"", j+1)) + 1, jsonData.indexOf("\"", k+1)));	
+		}
+
+ 	   
+      return bugDetailsMap;
 	}
 	
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

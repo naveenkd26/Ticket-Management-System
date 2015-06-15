@@ -9,10 +9,11 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.DBCursor;
 
+
 public interface MongoDriverInterface {
     String insertNewBug(BasicDBObject newBug);
     int updateBug(BasicDBObject[] updateQueryDBObject);
-	void getBugList();
+    public DBCursor getBugList();
 	void cleanUpResources();
 	void queryData();
 	DBCursor getBugDetails(BasicDBObject searchBugParams);	

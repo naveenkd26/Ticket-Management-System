@@ -2,6 +2,13 @@
 
   console.log("Angular compiling starts.");
 	var myApp = angular.module('ticketSystemApp', ["ui.router"]);
+	var DEV_ENV = "http://localhost:8080/TicketSystem/rest/bugAPI/";
+	var PROD_ENV = "";
+	
+	$(window).load(function() {
+		// Animate loader off screen
+		$(".se-pre-con").fadeOut("slow");;
+	});
      
      //Routing for the nested views starts.
      myApp.config(function($stateProvider, $urlRouterProvider){
@@ -108,60 +115,64 @@
                         
                         console.log("This is in addBug bugRepo function.");
                         console.log("Below are the new bug details.");
-                        console.log(JSON.stringify(newBugObject));
-                        /*$http.get('http://localhost:8080/TicketSystem/rest/getData/greetMessage')
+                        var bugDetails = JSON.stringify(newBugObject);
+                        console.log(bugDetails);
+                        $http.post(DEV_ENV + 'addbug/' + bugDetails)
                          .success(function(data, status, headers, config) {
                                //console.log("This is in rest call success function");
                                callback(data); 
                           }).error(function(data, status, headers, config) {
                                console.log("addBug web call failed.");
-                          });*/
+                          });
                   },
-        updateBug: function(bugObject, callback){
+        updateBug: function(newDetailsObj, callback){
                         
                         console.log("This is in update bugRepo function.");
                         console.log("Below are the update bug details.");
-                        console.log(JSON.stringify(bugObject));
-                        /*$http.get('http://localhost:8080/TicketSystem/rest/getData/greetMessage')
+                        var modifiedDetails = JSON.stringify(newDetailsObj);
+                        console.log(modifiedDetails);
+                        $http.put(DEV_ENV + 'updatebug/' + modifiedDetails)
                          .success(function(data, status, headers, config) {
-                               //console.log("This is in rest call success function");
+                               //console.log("This is in update bug success function");
                                callback(data); 
                           }).error(function(data, status, headers, config) {
-                               console.log("addBug web call failed.");
-                          });*/
+                               console.log("updateBug web call failed.");
+                          });
                   },
 
          getBugList: function(callback){
 
                          console.log("This is in getBugLis bugRepo function.");
-                        /*$http.get('http://localhost:8080/TicketSystem/rest/getData/greetMessage')
+                        $http.get(DEV_ENV + 'getbuglist')
                          .success(function(data, status, headers, config) {
-                               //console.log("This is in rest call success function");
+                               console.log("Loaded bug list Sucessfully.");
                                callback(data); 
                           }).error(function(data, status, headers, config) {
-                               console.log("addBug web call failed.");
-                          });*/
-                          var data = [ {"bugId":"1234","bugName":"Naveen","projectName":"Project Newton","category":"Production Issue","priority":"Medium","teamMember":"John Baartz","status":"Testing","comments":""},
+                               console.log("Loading bug list failed.");
+                          });
+/*                          var data = [ {"bugId":"1234","bugName":"Naveen","projectName":"Project Newton","category":"Production Issue","priority":"Medium","teamMember":"John Baartz","status":"Testing","comments":""},
                                        {"bugId":"1345","bugName":"Test 2","projectName":"Project Motion","category":"Incomplete Requirements","priority":"Critical","teamMember":"John Doe","status":"New","comments":"Need ASAP."},
                                        {"bugId":"1451","bugName":"Test 3","projectName":"Project Alpha","category":"Production Issue","priority":"Medium","teamMember":"Michael Boltz","status":"Testing","comments":"Need immediate action."},
                                        {"bugId":"1898","bugName":"Test 4","projectName":"Project Alpha","category":"Internal Issues","priority":"Low","teamMember":"Wendy Kim","status":"Testing","comments":"WIll be pushed to DEV."},
                                        {"bugId":"1678","bugName":"Test 5","projectName":"Project Motion","category":"Design Issue","priority":"High","teamMember":"John Doe","status":"New","comments":"This is a Dev Blocker."}
                                      ];
-                          callback(data);           
+                          callback(data);*/          
                       }, 
 
-        getBugDetails: function(bugId, callback){
+        getBugDetails: function(searchParamsObj, callback){
 
-                         console.log("This is in getBugDetails bugRepo function. BugId:  " + bugId);       
-        	            /*$http.get('http://localhost:8080/TicketSystem/rest/getData/greetMessage')
+                         console.log("This is in getBugDetails bugRepo function. BugId:  " + searchParamsObj.bugId);       
+                         var searchParams = JSON.stringify(searchParamsObj);
+                         console.log(searchParams);
+                         $http.get(DEV_ENV + 'getbugdetails/' + searchParams)
                          .success(function(data, status, headers, config) {
-                               //console.log("This is in rest call success function");
+                               console.log("This is in getBugDetails success function. Data : " + data);
                                callback(data); 
                           }).error(function(data, status, headers, config) {
-                               console.log("addBug web call failed.");
-                          });*/
-                        var data = '{"bugId":"1678","bugName":"Test 5","projectName":"Project Motion","category":"Design Issue","priority":"High","teamMember":"John Doe","status":"New","comments":"This is a Dev Blocker."}';
-                        callback(data);
+                               console.log("getBugDetails web call failed.");
+                          });
+/*                        var data = '{"bugId":"1678","bugName":"Test 5","projectName":"Project Motion","category":"Design Issue","priority":"High","teamMember":"John Doe","status":"New","comments":"This is a Dev Blocker."}';
+                        callback(data);*/
 
                       }
       };    	
@@ -172,7 +183,7 @@
     // Service which returns an Bug Object starts.
     myApp.factory("bugObject", function(){
       return function(){
-      this.bugId = "naveen";
+      this.bugId = "";
       this.bugName = "";
       this.projectName = "";
       this.category = "";
@@ -183,13 +194,21 @@
       };
     });
    // Service which returns Bug Object ends.
+    
+    // Service which returns an findBug Object starts.
+    myApp.factory("findBugObject", function(){
+      return function(){
+      this.bugId = "";
+      };
+    });
+   // Service which returns findBug Object ends.
 
    
    // addNewBugController starts.
    myApp.controller("addNewBugController", ['$scope', 'bugRepository', 'bugObject', function($scope, bugRepository, bugObject){
     
        //scope variables starts
-       $scope.bugId = "naveen kumar dokuparthi";
+       $scope.bugId = "";
        $scope.bugName = "";
        $scope.projectName = "";
        $scope.category = "";
@@ -217,8 +236,8 @@
 
           //console.log(JSON.stringify(newBug));
           bugRepository.addBug(newBugObject,function(data){
-            //console.log("This is in the callback function.");
-            //console.log(data);
+            console.log("This is in the callback function.");
+            console.log(data);
           });
      };
 
@@ -253,13 +272,16 @@
 
 
   // updateBugcontroller starts
-  myApp.controller("updateBugController", ['$scope','$stateParams', 'bugObject', 'bugRepository', function($scope, $stateParams, bugObject, bugRepository){
+  myApp.controller("updateBugController", ['$scope','$stateParams', 'bugObject', 'findBugObject', 'bugRepository', function($scope, $stateParams, bugObject, findBugObject, bugRepository){
     
-    //console.log("Bug Id for which the details are requested:  "+ $stateParams.bugId); 
-    bugRepository.getBugDetails($stateParams.bugId, function(resultsBack){
+    //console.log("Bug Id for which the details are requested:  "+ $stateParams.bugId);
+	var searchParamsObj = new findBugObject();
+	searchParamsObj.bugId = $stateParams.bugId;
+	
+    bugRepository.getBugDetails(searchParamsObj, function(resultsBack){
     	
-       var data = JSON.parse(resultsBack);
-       //console.log("Bug details received from the server :  + data");
+       var data = resultsBack;
+       //Setting the bug details received form the server to the view.
        $scope.bugId = data.bugId;
        $scope.bugName = data.bugName;
        $scope.projectName = data.projectName;
@@ -269,7 +291,6 @@
        $scope.status = data.status;
        $scope.comments = data.comments;
     });
-
     $scope.updateBug = function(){
           //console.log("Adding new bug to the DB.");
           //$scope.hideInstruction();
@@ -284,10 +305,10 @@
           bug.teamMember = $scope.teamMember;
           bug.status = $scope.status;
           bug.comments = $scope.comments;
-
+          
           //console.log(JSON.stringify(newBug));
-          bugRepository.updateBug(bug,function(data){
-            //console.log("This is in the callback function.");
+          bugRepository.updateBug(bug, function(data){
+            console.log("This is in the updatebug callback function.");
             //console.log(data);
           });
       };

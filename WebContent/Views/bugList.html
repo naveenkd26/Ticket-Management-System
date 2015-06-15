@@ -1,9 +1,10 @@
-	
+
 <div ng-controller = "bugListController">
+<!-- <div class="se-pre-con"></div>Image loading icon -->
 <table width="100%" class="bugListTable">
 	
 <tr>
-	<th class="bugDetailRow1">Bug id#</th>
+	<th class="bugDetailRow1">Bug id</th>
 	<th class="bugDetailRow2">Name</th>
 	<th class="bugDetailRow1">Project</th>
 	<th class="bugDetailRow3">Category</th>
@@ -13,7 +14,7 @@
 	<th class="bugDetailRow2">Comments</th>
 	<th class="bugDetailRow1"></th>
 </tr>
-<tr ng-repeat = "eachIssue in issueList">
+<tr ng-repeat = "eachIssue in issueList | orderBy:'bugId'" >
 	<td class="bugDetailRow1">{{eachIssue.bugId}}</td>
 	<td class="bugDetailRow2">{{eachIssue.bugName}}</td>
 	<td class="bugDetailRow1">{{eachIssue.projectName}}</td>
