@@ -44,8 +44,13 @@ public class MongoDriver implements MongoDriverInterface {
 	public String insertNewBug(BasicDBObject newBug){
 				
 		//Insert query format: db.collection.insert()
-	    String dbResponse = collection.insert(newBug).toString();
-		return dbResponse;
+	    WriteResult status = collection.insert(newBug);
+		
+		if(status.getN() == 1){
+			return "success";
+		}else{
+			return "failure";
+		}
 	 
 	 }
 	

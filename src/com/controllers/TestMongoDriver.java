@@ -40,7 +40,7 @@ public class TestMongoDriver {
 		//addBug();
 	    //addBugIdSequence();
 	    //getNextBugId();
-	    incrementBugId();
+	    //incrementBugId();
 	    getNextBugId();
 		}catch(Exception e){
 			e.printStackTrace();

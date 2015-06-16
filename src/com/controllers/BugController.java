@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-
-//****************Add Exceptional Handling********************************
 @Path("bugAPI")
 public class BugController {
 	
@@ -35,14 +33,15 @@ public class BugController {
 	MongoDriverInterface mongoDriver;
 	Gson gson;
 	
-	
 	public BugController() {
 		// TODO Auto-generated constructor stub
 	}
-	
-    
-	//http://localhost:8080/TicketSystem/rest/bugAPI/addbug/{asdasdasdasdasdsdad}
+	//
+	//
+	//http://localhost:8080/TicketSystem/rest/bugAPI/addbug/{bugDetails}
 	//@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+	//Description: This is invoked when the user adds new bug.
+	//Returns    : Returns status message of the insert query.
 	@POST
 	@Path("/addbug/{bugDetails}")
     @Produces(MediaType.TEXT_PLAIN)
@@ -63,32 +62,37 @@ public class BugController {
 			//Creating a Mongo DBObject(Only format accepted by mongodb) from the bugDetails HashMap.
 			mongoQueryObj = utilObj.getAddBugDBObject(bugDetails); 
         		
-/*        		new <String, String>HashMap();
-        int i, j, k;
-        
-       try{
-           //Creating a HashMap out of the JSON string which contain new bug details.
-           //Gain: If in future, if we have to capture a  new detail for the bug, we don't
-    	   //have to modify anything since we are processing the whole JSON string that we are
-    	   //getting from the screen using delimiters ' , ' and ' " '. 
-    	   for(String eachDetail : details){
-        	 i = eachDetail.indexOf("\"");
-        	 bugDetails.put(eachDetail.substring(i+1 , j = eachDetail.indexOf("\"", i+1)), eachDetail.substring((k = eachDetail.indexOf("\"", j+1)) + 1, eachDetail.indexOf("\"", k+1)) );
-             }*/
-           //System.out.println(bugDetails);		
-		
-		   //Executing the insert query and returning the response received from mongoDB.
-		   return mongoDriver.insertNewBug(mongoQueryObj);
+		   //Executing the insert query and returning the response received from mongoDB.	   
+			String resp = mongoDriver.insertNewBug(mongoQueryObj);
+			System.out.println("Insert query status  " + resp);
+			
+			//Check for the insert query status
+			
+			//Getting the MongoDB Object(Only format accepted by mongoDB) for incrementing the bug sequence.
+			BasicDBObject[] queryObj = utilObj.getIncrementBugSeqDBObject();
+			  
+            //Executing the query to increment bug sequence.
+			int n = mongoDriver.updateBug(queryObj);
+			System.out.println("Inceremented rows  " + n);
+			
+			if(n== 1){
+				return "success";
+			}else{
+				return "failure";
+			}	
+			
        }
        catch(Exception e){
     	   e.printStackTrace();
-    	   return "Error occured.";
+    	   return "Error occured";
        }
 	
 	}
 	//
 	//
 	//http://localhost:8080/TicketSystem/rest/bugAPI/getbuglist
+	//Description: This is invoked when the bug list screen is loaded.
+	//Returns    : Returns the list of bugs present in the the database.
 	@GET
 	@Path("/getbuglist")
     @Produces(MediaType.APPLICATION_JSON)
@@ -111,7 +115,7 @@ public class BugController {
 		      
 		}catch(Exception e){
 	    	e.printStackTrace();
-			return "Error occured.";
+			return "Error occured";
 		}	
 		
 		//Returning the List of Bug objects to the client in JSON format.
@@ -120,6 +124,8 @@ public class BugController {
 	//
 	//
 	//http://localhost:8080/TicketSystem/rest/bugAPI/getbugdetails/{params}
+	//Description: This is invoked when the client clicks the 'Update' button for a particular bug in the bug list.
+	//Returns    : Returns the details of the bug for which the user wants to update.
 	@GET
 	@Path("/getbugdetails/{bugParams}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -156,6 +162,8 @@ public class BugController {
 	//
 	//
 	//http://localhost:8080/TicketSystem/rest/bugAPI/updatebug/{params}
+	//Description: This is invoked when the bug details for a particular bug are updated.
+	//Returns    : Returns the status of the update operation performed in the mongoDB.
 	@PUT
 	@Path("/updatebug/{modifiedParams}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -187,7 +195,74 @@ public class BugController {
       	
 	  return String.valueOf(status);	
 	}
-
+	//
+	//
+	//http://localhost:8080/TicketSystem/rest/bugAPI/getNextAvailableBugId
+	//Description: This is invoked whenever client wants to add new Bug.
+	//Returns    : Returns the next available Bug Id by querying the mongoDB
+	//             for the new Bug the user want to add.
+	@GET
+	@Path("/getNextAvailableBugId")
+    @Produces(MediaType.TEXT_HTML)
+	public String getNextAvailableBugId(){
+		
+		//System.out.println("This is in getNextAvailableBugId controller");	
+		utilObj = (UtilityInterface)context.getBean("utilityBean");		
+		mongoDriver = (MongoDriverInterface)context.getBean("mongoDriverBean");
+		DBCursor cur;
+		gson = new Gson();
+		
+		try{
+			  //Getting the MongoDB Object(Only format accepted by mongoDB) for requesting the next available Bug Id.
+			  BasicDBObject queryObj = utilObj.getBugIDDBObject();
+			  
+              //Executing the query to pull the net available Bug Id.
+			  cur = mongoDriver.getBugDetails(queryObj);
+			
+		      //Pulling the bugId from the DBCursor and returning it to the client.
+		      return utilObj.getAvailableBugIDFromDBCursor(cur);		  
+			  		      
+		}catch(Exception e){
+	    	e.printStackTrace();
+			return "Error occured";
+		}	
+						
+	}
+	//
+	//
+	//
+	//http://localhost:8080/TicketSystem/rest/bugAPI/incrementBugSequence
+	//Description: This is invoked to increment the bug sequence.
+	//Returns    : Returns status of the update query.
+	@PUT
+	@Path("/incrementBugSequence")
+    @Produces(MediaType.TEXT_HTML)
+	public String incrementBugSequence(){
+		
+		//System.out.println("This is in getNextAvailableBugId controller");	
+		utilObj = (UtilityInterface)context.getBean("utilityBean");		
+		mongoDriver = (MongoDriverInterface)context.getBean("mongoDriverBean");
+		DBCursor cur;
+		gson = new Gson();
+		
+		try{
+			  //Getting the MongoDB Object(Only format accepted by mongoDB) for incrementing the bug sequence.
+			  BasicDBObject[] queryObj = utilObj.getIncrementBugSeqDBObject();
+			  
+              //Executing the query to increment bug sequence.
+			  int n = mongoDriver.updateBug(queryObj);
+			
+		      if(n == 1)
+		    	  return "success";
+		      else
+		    	  return "failure" ;
+		      
+		}catch(Exception e){
+	    	e.printStackTrace();
+			return "Error occured";
+		}	
+						
+	}
 	
 /*	//Exception handling
 	try{

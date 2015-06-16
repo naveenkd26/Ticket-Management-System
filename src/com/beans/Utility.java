@@ -146,10 +146,60 @@ public class Utility implements UtilityInterface{
 			bugDetailsMap.put(jsonData.substring(2, j = jsonData.indexOf("\"", 2)), jsonData.substring( (k= jsonData.indexOf("\"", j+1)) + 1, jsonData.indexOf("\"", k+1)));	
 		}
 
- 	   
       return bugDetailsMap;
 	}
-	
+	//
+	//
+	//
+	//Function Name: getBugIDDBObject()
+	//Parameters   : None
+	//Description  : Generates DBObject to enquire mongoDB for the next available Bug ID.   
+	public BasicDBObject getBugIDDBObject() throws Exception{
+		
+		BasicDBObject obj = new BasicDBObject();	
+		//Passing the unique _id (primary key) where next available bug id is present.
+		obj.put("_id", "bugSequence");
+		
+		return obj;
+	}
+	//
+	//
+	//
+	//Function Name: getAvailableBugIDFromDBCursor(DBCursor cur)
+	//Parameters   : DBCursor which contains the next available Bug id received from the mongoDB.
+	//Description  : Returns the next available Bug Id.  
+	public String getAvailableBugIDFromDBCursor(DBCursor cur) throws Exception{
+		
+		DBObject doc;
+		String nextAvailBugId = null;
+		//Passing through the cursor to find the next available bug id.
+		while(cur.hasNext()){  
+			doc = cur.next();
+			nextAvailBugId = doc.get("nextBugId").toString();
+		}
+		
+		return nextAvailBugId;
+	}
+	//
+	//
+	//
+	//Function Name: incrementBugSeqDBObject()
+	//Parameters   : None
+	//Description  : Returns the query obj to increment the bug sequence. 
+	public BasicDBObject[] getIncrementBugSeqDBObject() throws Exception{
+		
+		//Building the query object where nextAvailable sequence is found. 
+		BasicDBObject searchParams = new BasicDBObject();
+		searchParams.put("_id", "bugSequence");
+		
+		//Building the options object which increments the existing bug sequence.
+		BasicDBObject updateParams = new BasicDBObject();
+		updateParams.put("$inc", new BasicDBObject("nextBugId", 1));
+		
+		BasicDBObject[] queryObj = new BasicDBObject[]{searchParams, updateParams};
+		
+		return queryObj;
+	}
 
 }
 
