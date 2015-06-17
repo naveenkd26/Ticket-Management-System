@@ -4,12 +4,7 @@
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
     
-    <bean id="employeeBean" class = "com.beans.Employee">
-    <property name="fName" value="Raga"/>
-    <property name="lName" value="XXXXXXXX"/>
-    <property name="dob" value="03/18/2015"/>
-    </bean>
-    
+       
     <bean id="newBugBean" class = "com.beans.Bug" scope = "prototype"></bean>
     
     <bean id="utilityBean" class = "com.beans.Utility" scope = "singleton"></bean>

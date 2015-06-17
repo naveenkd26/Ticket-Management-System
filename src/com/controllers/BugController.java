@@ -84,7 +84,7 @@ public class BugController {
        }
        catch(Exception e){
     	   e.printStackTrace();
-    	   return "Error occured";
+    	   return "failure";
        }
 	
 	}
@@ -119,7 +119,7 @@ public class BugController {
 		}	
 		
 		//Returning the List of Bug objects to the client in JSON format.
-		return gson.toJson(bugList);				
+		return gson.toJson(bugList);
 	}
 	//
 	//

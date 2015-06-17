@@ -41,7 +41,10 @@ public class TestMongoDriver {
 	    //addBugIdSequence();
 	    //getNextBugId();
 	    //incrementBugId();
-	    getNextBugId();
+         Map<String, String> mp = getHashMapFromJSON("{\"bugId\":\"1600\"}");
+         System.out.println(mp);
+         System.out.println(new Gson().toJson(new String("Eoor")));
+	    //getNextBugId();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -214,6 +217,32 @@ public class TestMongoDriver {
 		
 		client.close();	
 		
+	}
+	
+	public static Map<String, String> getHashMapFromJSON(String jsonData) throws Exception{
+		 
+		Map<String, String> bugDetailsMap = new <String, String>HashMap();
+		
+		//check whether jsonData has single or multiple "key:value" pairs
+		//because single "key:value" doesn't contain delimiter ',' and will return Null pointer Exception.
+		if(jsonData.contains(",")){
+			     
+			String[] details = jsonData.split(",");
+	        int i, j, k;
+			
+ 	 	   for(String eachDetail : details){
+	      	 i = eachDetail.indexOf("\"");
+	      	bugDetailsMap.put(eachDetail.substring(i+1 , j = eachDetail.indexOf("\"", i+1)), eachDetail.substring((k = eachDetail.indexOf("\"", j+1)) + 1, eachDetail.indexOf("\"", k+1)) );
+	           }
+	 	   
+		}else{
+			//Case for single "key:vale" pair.
+			//Use :when we are sending only bugId for findBugDetails()
+			int j, k;
+			bugDetailsMap.put(jsonData.substring(2, j = jsonData.indexOf("\"", 2)), jsonData.substring( (k= jsonData.indexOf("\"", j+1)) + 1, jsonData.indexOf("\"", k+1)));	
+		}
+
+      return bugDetailsMap;
 	}
 	
 	

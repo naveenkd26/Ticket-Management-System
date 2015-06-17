@@ -3,7 +3,7 @@
 <table class="newBugTableProps" border="0" cellpadding="10">
 	<tr class="tableRow">
 		<td width="30%"><label for="bugId">Bug id#</label></td>
-		<td width="40%"><input ng-model = "bugId" type="text" class="form-control"  placeholder=""></td>
+		<td width="40%"><input ng-model = "bugId" type="text" class="form-control" placeholder="" ng-disabled = "true"></td>
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="bugName">Name</label></td>
@@ -62,7 +62,42 @@
 		<td colspan="2"><button type="button" ng-click="addNewBug()" class="btn btn-primary button-center">Add Bug</button>&nbsp&nbsp&nbsp<button type="button" ng-click="resetBugDetails()" class="btn btn-primary button-center">Reset</button></td>
 	</tr>
 
-
 </table>
+
+<!-- Modal for prompting the status of the operation. -->
+<div class="modal fade" id="exampleModal" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel" align="center"></h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <h4 class="modal-message" align="center" ng-style = {color:'#DA4453'}></h4>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal" ng-style = {width:'60px'}>Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<button type="button" id="successMsg" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-status = "Bug saved sucessfully. Please use 'Bugs' option to see the added Bug." ng-show = "false"></button>
+<button type="button" id="failureMsg" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-status = "Saving Bug failed, please re-try." ng-show = "false"></button>
+<button type="button" id="fetchBugIdFailed" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-status = "Retrieving next available Bug id# failed, please re-try." ng-show = "false"></button>
+
+<script>
+/*Binding the events for the status message buttons.*/
+$('#exampleModal').on('show.bs.modal', function (event) {
+  var modal = $(this);
+  var button = $(event.relatedTarget);
+  var statusMsg = button.data('status');
+  modal.find('.modal-title').text('Thanks for using Ticket Management System.');
+  modal.find('.modal-message').text(statusMsg);
+});
+</script>
+
 </div>
 
