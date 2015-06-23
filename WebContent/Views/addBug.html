@@ -11,48 +11,23 @@
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="projectName">Project</label></td>
-		<td width="40%"><select class="form-control" ng-model = "projectName">
-			<option>Project Alpha</option>
-			<option>Project Motion</option>
-			<option>Project Newton</option>
-		</select></td>
+		<td width="40%"><select class="form-control" ng-model = "projectName" ng-options = "eachProject for eachProject in projects"></select></td>
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="category">Category</label></td>
-		<td width="40%"><select class="form-control" ng-model = "category">
-			<option>Internal Issues</option>
-			<option>Production Issue</option>
-			<option>Design Issue</option>
-			<option>Incomplete Requirements</option>
-		</select></td>
+		<td width="40%"><select class="form-control" ng-model = "category" ng-options ="eachCategory for eachCategory in categorys"></select></td>
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="priority">Priority</label></td>
-		<td width="40%"><select class="form-control" ng-model = "priority">
-			<option>Low</option>
-			<option>Medium</option>
-			<option>High</option>
-			<option>Critical</option>
-		</select></td>
+		<td width="40%"><select class="form-control" ng-model = "priority" ng-options ="eachPriority for eachPriority in prioritys"></select></td>
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="teamMember">Assigned to</label></td>
-		<td width="40%"><select class="form-control" ng-model = "teamMember">
-			<option>John Doe</option>
-			<option>Wendy Kim</option>
-			<option>John Baartz</option>
-			<option>Michael Boltz</option>
-		</select></td>
+		<td width="40%"><select class="form-control" ng-model = "teamMember" ng-options ="eachMember for eachMember in teamMembers"></select></td>
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="status">Status</label></td>
-		<td width="40%"><select class="form-control" ng-model = "status">
-			<option>New</option>
-			<option>Resolved in Local</option>
-			<option>Testing</option>
-			<option>Pushed to Dev</option>
-			<option>Pushed to Live</option>
-		</select></td>
+		<td width="40%"><select class="form-control" ng-model = "status" ng-options ="eachStatus for eachStatus in statuses"></select></td>
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="description">Comments</label></td>
@@ -86,7 +61,7 @@
 </div>
 <button type="button" id="successMsg" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-status = "Bug saved sucessfully. Please use 'Bugs' option to see the added Bug." ng-show = "false"></button>
 <button type="button" id="failureMsg" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-status = "Saving Bug failed, please re-try." ng-show = "false"></button>
-<button type="button" id="fetchBugIdFailed" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-status = "Retrieving next available Bug id# failed, please re-try." ng-show = "false"></button>
+<button type="button" id="fetchBugIdFailed" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-status = "Retrieving next available Bug id# failed, please retry." ng-show = "false"></button>
 
 <script>
 /*Binding the events for the status message buttons.*/

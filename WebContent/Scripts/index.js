@@ -24,7 +24,7 @@
      //Routing for the nested views starts.
      myApp.config(function($stateProvider, $urlRouterProvider){
 
-      $urlRouterProvider.otherwise("/adminOptions");
+      $urlRouterProvider.otherwise("/userOptions");
 
       $stateProvider
         .state('bugMenu', {
@@ -206,6 +206,24 @@
                           });
                       },
                       
+         getAddBugInfo: function(callback){
+
+                          //Showing the spinner before the AJAX call.
+                          $('.spinner').show();
+                          $http.get(ENV + 'getAddBugInfo')
+                          .success(function(data, status, headers, config) {
+                                console.log("This is in getAddBugInfo success function. Data : " + data);
+                         	   //Hiding the spinner once we receive the response. 
+                        	       $('.spinner').hide();
+                                callback(data); 
+                           }).error(function(data, status, headers, config) {
+                         	   //Hiding the spinner once we receive the response. 
+                         	   $('.spinner').hide();
+                                console.log("getAddBugInfo web call failed.");
+                                callback("Error occured");
+                           });
+                       },
+                      
          getAvailableBugId: function(callback){
 
                           //Showing the spinner before the AJAX call.
@@ -223,13 +241,29 @@
                                 console.log("getAvailableBugId web call failed.");
                                 callback("Error occured");
                            });
- /*                        var data = '{"bugId":"1678","bugName":"Test 5","projectName":"Project Motion","category":"Design Issue","priority":"High","teamMember":"John Doe","status":"New","comments":"This is a Dev Blocker."}';
-                         callback(data);*/
+                       },
+                       
+          addNewAdminOption: function(newAdminOption, callback){
 
-                       }
+                           //Showing the spinner before the AJAX call.
+                           $('.spinner').show();
+         	              console.log("This is in addNewAdminOption bugRepo function.");  
+                           $http.put(ENV + 'addAdminOption/' + newAdminOption)
+                           .success(function(data, status, headers, config) {
+                                 console.log("This is in addNewAdminOption success function. Data : " + data);
+                          	    //Hiding the spinner once we receive the response. 
+                         	    $('.spinner').hide();
+                                 callback(data); 
+                            }).error(function(data, status, headers, config) {
+                         	    //Hiding the spinner once we receive the response. 
+                            	    $('.spinner').hide();
+                                 console.log("addNewAdminOption web call failed.");
+                                 callback("Error occured");
+                            });
+                        }              
       };    	
     }]);
-    // Repository class which makes all the REST calls ends.
+    // Repository class which makes all the REST calls ends. getAddBugInfo
 
 
     // Service which returns an Bug Object starts.
@@ -259,12 +293,26 @@
    // addNewBugController starts.
    myApp.controller("addNewBugController", ['$scope', 'bugRepository', 'bugObject', function($scope, bugRepository, bugObject){
     
-	     bugRepository.getAvailableBugId(function(resultsBack){
+/*	     bugRepository.getAvailableBugId(function(resultsBack){
              if(resultsBack.toString() == "Error occured"){
            	  $('#fetchBugIdFailed').click();            	  
              }else{
     	         $scope.bugId = resultsBack.toString();   
              }
+	     });*/
+	   
+	     bugRepository.getAddBugInfo(function(resultsBack){
+             if(resultsBack.toString() == "Error occured"){
+           	  $('#fetchBugIdFailed').click();            	  
+             }else{     	 
+            	 $scope.bugId = resultsBack.nextAvailBugId.toString();
+    	         $scope.projects = resultsBack.project;
+    	         $scope.categorys = resultsBack.category;
+    	         $scope.prioritys = resultsBack.priority;
+    	         $scope.teamMembers = resultsBack.teamMember;
+    	         $scope.statuses = resultsBack.status;
+             }
+             
 	     });
 	     
 	   //scope variables starts
@@ -305,7 +353,7 @@
                      if(resultsBack.toString() == "Error occured"){
                    	  $('#fetchBugIdFailed').click();            	  
                      }else{
-            	         $scope.bugId = resultsBack.toString();   
+            	         $scope.bugId = parseInt(resultsBack);   
                      }
                      
          	     });  
@@ -341,14 +389,11 @@
      if(resultsBack.toString() != "Error occured"){
           $scope.issueList = resultsBack;      		  
 	  }else{
-    	  $('#failureMsg').click();     		  
+    	  $('#failureMsg').click();
 	  }
 
     });
     
-    /*$scope.updateBug = function(bugId){
-    	console.log("The selected BugId is:::::::::::::  "+ bugId);
-      }*/
   }]);
   // bugListController ends.
 
@@ -367,15 +412,22 @@
       //Checking whether the response from the server is success. 
       if(resultsBack.toString() != "Error occured"){
 
-    	  //Setting the bug details received form the server to the view.
-          $scope.bugId = resultsBack.bugId;
-          $scope.bugName = resultsBack.bugName;
-          $scope.projectName = resultsBack.projectName;
-          $scope.category = resultsBack.category;
-          $scope.priority = resultsBack.priority;
-          $scope.teamMember = resultsBack.teamMember;
-          $scope.status = resultsBack.status;
-          $scope.comments = resultsBack.comments;     
+    	 //Setting the drop down select options.
+         $scope.projects = resultsBack.addBugInfo.project;
+         $scope.categorys = resultsBack.addBugInfo.category;
+         $scope.prioritys = resultsBack.addBugInfo.priority;
+         $scope.teamMembers = resultsBack.addBugInfo.teamMember;
+         $scope.statuses = resultsBack.addBugInfo.status;
+    	           
+   	     //Setting the bug details received form the server.
+         $scope.bugId = resultsBack.bugDetails[0].bugId;
+         $scope.bugName = resultsBack.bugDetails[0].bugName;
+         $scope.projectName = resultsBack.bugDetails[0].projectName;
+         $scope.category = resultsBack.bugDetails[0].category;
+         $scope.priority = resultsBack.bugDetails[0].priority;
+         $scope.teamMember = resultsBack.bugDetails[0].teamMember;
+         $scope.status = resultsBack.bugDetails[0].status;
+         $scope.comments = resultsBack.bugDetails[0].comments;    
           
    	  }else{
        	  $('#loadFailureMsg').click();     		  
@@ -443,9 +495,49 @@
   // userOptionsController ends.
   
   // adminOptionsController starts.
-  myApp.controller("adminOptionsController", ['$scope', function($scope){
+  myApp.controller("adminOptionsController", ['$scope', 'bugRepository', function($scope, bugRepository){
 
-	    console.log("This is in adminOptionsController.");
+	  $scope.newProject = "";  
+	  $scope.newCategory = ""; 
+	  $scope.newPriority = ""; 
+	  $scope.newMember = ""; 
+	  $scope.newStatus = ""; 
+
+	  console.log("This is in adminOptionsController. sameold issue");
+	    
+	       $scope.addProject = function(){
+                   $scope.addAdminOption("project", $scope.newProject);
+             	   $scope.newProject = "";
+	       };
+	       $scope.addCategory = function(){
+                   $scope.addAdminOption("category", $scope.newCategory);
+             	   $scope.newCategory = ""; 
+           };
+           $scope.addPriority = function(){
+        	       $scope.addAdminOption("priority", $scope.newPriority);
+        	 	   $scope.newPriority = ""; 
+            };
+           $scope.addTeamMember = function(){
+                   $scope.addAdminOption("teamMember", $scope.newMember);
+             	   $scope.newMember = ""; 
+            };
+           $scope.addStatus = function(){
+                   $scope.addAdminOption("status", $scope.newStatus);
+             	   $scope.newStatus = ""; 
+            };
+
+            
+	       $scope.addAdminOption = function(selectedOption, newValue){
+	    	       	   
+	    	   var newOption = "{\"" + selectedOption + "\":\"" + newValue +"\"}";
+	           bugRepository.addNewAdminOption(newOption,function(data){
+	               if(data.toString() == "success"){	             	  
+	             	  $('#successMsg').click();
+	               }else{
+	             	  $('#failureMsg').click();   
+	               }
+	           });
+	      };
 
 	  }]);
   // adminOptionsController ends.

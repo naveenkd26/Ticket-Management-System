@@ -3,6 +3,7 @@ package com.controllers;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -41,9 +42,10 @@ public class TestMongoDriver {
 	    //addBugIdSequence();
 	    //getNextBugId();
 	    //incrementBugId();
-         Map<String, String> mp = getHashMapFromJSON("{\"bugId\":\"1600\"}");
-         System.out.println(mp);
-         System.out.println(new Gson().toJson(new String("Eoor")));
+         //Map<String, String> mp = getHashMapFromJSON("{\"bugId\":\"1600\"}");
+         //System.out.println(mp);
+        // System.out.println(new Gson().toJson(new String("Eoor")));
+	    addTeam();
 	    //getNextBugId();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -243,6 +245,35 @@ public class TestMongoDriver {
 		}
 
       return bugDetailsMap;
+	}
+	
+	public static void addTeam(){
+		
+		MongoClientURI uri = new MongoClientURI("mongodb://testuser1:ZxCvBnM@ds037262.mongolab.com:37262/ticketsystemdb");
+		MongoClient client = new MongoClient(uri);
+		DB db = client.getDB(uri.getDatabase());
+		DBCollection collection = db.getCollection("tickets");
+		try{
+			
+			BasicDBObject obj = new BasicDBObject();
+			obj.put("_id", "addBugInfo");
+			obj.put("nextAvailBugId", 1700);
+			obj.put("project", new ArrayList());
+			obj.put("category", new ArrayList());
+			obj.put("priority", new ArrayList());
+			obj.put("teamMember", new ArrayList());
+			obj.put("status", new ArrayList());
+		
+			WriteResult n = collection.insert(obj);
+			
+			System.out.println(n.getN());
+			
+		}catch(Exception e){
+			System.out.println("Error occured in Test Mongo Driver class");
+			e.printStackTrace();
+		}
+
+		
 	}
 	
 	

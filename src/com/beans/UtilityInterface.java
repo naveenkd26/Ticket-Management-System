@@ -16,4 +16,7 @@ public interface UtilityInterface {
 	public String getAvailableBugIDFromDBCursor(DBCursor cur) throws Exception;
 	public BasicDBObject getBugIDDBObject() throws Exception;
 	public BasicDBObject[] getIncrementBugSeqDBObject() throws Exception;
+	public BasicDBObject[] getAddAdminOptionDBObject(String optionName, String value) throws Exception;
+	public AddBugInfo getAddBugInfoObjectFromDBCursor(ApplicationContext context, DBCursor dbCursor) throws Exception;
+	public BasicDBObject getAddBugInfoDBObject() throws Exception;
 }

@@ -4,7 +4,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.mongodb.*;
+import com.beans.AddBugInfo;
 import com.beans.Bug;
+import com.beans.BugDetails;
 import com.beans.BugList;
 import com.beans.UtilityInterface;
 import com.datalayer.MongoDriverInterface;
@@ -125,7 +127,7 @@ public class BugController {
 	//
 	//http://localhost:8080/TicketSystem/rest/bugAPI/getbugdetails/{params}
 	//Description: This is invoked when the client clicks the 'Update' button for a particular bug in the bug list.
-	//Returns    : Returns the details of the bug for which the user wants to update.
+	//Returns    : Returns the details of the bug for which the user wants to update.  
 	@GET
 	@Path("/getbugdetails/{bugParams}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -135,8 +137,11 @@ public class BugController {
 	    DBCursor cur;
 	    Map<String, String> findBugMap;
 	    gson = new Gson();
+	    BasicDBObject queryObj;
+	    AddBugInfo bugOptions;
 		utilObj = (UtilityInterface)context.getBean("utilityBean");		
 		mongoDriver = (MongoDriverInterface)context.getBean("mongoDriverBean");
+		BugDetails bugDetails = (BugDetails)context.getBean("bugDetailsBean");
 		
       try{
 	
@@ -149,15 +154,27 @@ public class BugController {
     	  //Querying the bug details by passing the queryObj to mongoDB which contains the search parameters.
     	  cur = mongoDriver.getBugDetails(mongoQueryObj);
          
-         //Converting the DBCursor(returned by mongoDB) to list of Bug objects.
-         bugList = utilObj.getBugObjectsListFromDBCursor(context, cur);
+          //Converting the DBCursor(returned by mongoDB) to list of Bug objects.
+          bugList = utilObj.getBugObjectsListFromDBCursor(context, cur);
          
+		  //Getting the MongoDB Object(Only format accepted by mongoDB) for retrieving the details
+		  //about Available bug id, project, category, priority, team and status.
+		  queryObj = utilObj.getAddBugInfoDBObject();
+		  
+          //Executing the query.
+		  cur = mongoDriver.getBugDetails(queryObj);
+		  
+		  bugOptions = utilObj.getAddBugInfoObjectFromDBCursor(context, cur);
+         
+          bugDetails.setBugDetails(bugList);
+          bugDetails.setAddBugInfo(bugOptions);
+               
       }catch(Exception e){
 	        e.printStackTrace();
 	        return "Error occured";
       }
       	
-	  return gson.toJson(bugList.get(0));	
+	  return gson.toJson(bugDetails);	
 	}
 	//
 	//
@@ -210,7 +227,6 @@ public class BugController {
 		utilObj = (UtilityInterface)context.getBean("utilityBean");		
 		mongoDriver = (MongoDriverInterface)context.getBean("mongoDriverBean");
 		DBCursor cur;
-		gson = new Gson();
 		
 		try{
 			  //Getting the MongoDB Object(Only format accepted by mongoDB) for requesting the next available Bug Id.
@@ -242,8 +258,6 @@ public class BugController {
 		//System.out.println("This is in getNextAvailableBugId controller");	
 		utilObj = (UtilityInterface)context.getBean("utilityBean");		
 		mongoDriver = (MongoDriverInterface)context.getBean("mongoDriverBean");
-		DBCursor cur;
-		gson = new Gson();
 		
 		try{
 			  //Getting the MongoDB Object(Only format accepted by mongoDB) for incrementing the bug sequence.
@@ -260,8 +274,76 @@ public class BugController {
 		}catch(Exception e){
 	    	e.printStackTrace();
 			return "Error occured";
-		}	
+		}
+	}
+		//
+		//
+		//
+		//http://localhost:8080/TicketSystem/rest/bugAPI/addAdminOption/{newAdminOption}
+		//Description: This is invoked to add new admin option.
+		//Returns    : Returns status of the insert query.
+		@PUT
+		@Path("/addAdminOption/{newAdminOption}")
+	    @Produces(MediaType.TEXT_HTML)
+		public String addAdminOption(@PathParam("newAdminOption") String newAdminOption){
+			
+			 BasicDBObject[] queryObj;
+			 int j,k;
+			//System.out.println("This is in getNextAvailableBugId controller");	
+			utilObj = (UtilityInterface)context.getBean("utilityBean");		
+			mongoDriver = (MongoDriverInterface)context.getBean("mongoDriverBean");
+					
+			try{
+				  //Getting the MongoDB Object(Only format accepted by mongoDB) for incrementing the bug sequence.
+				  queryObj = utilObj.getAddAdminOptionDBObject(newAdminOption.substring(2, j = newAdminOption.indexOf("\"", 2)), newAdminOption.substring( (k= newAdminOption.indexOf("\"", j+1)) + 1, newAdminOption.indexOf("\"", k+1)));
+				  
+	              //Executing the query to increment bug sequence.
+				  int n = mongoDriver.updateBug(queryObj);
+				  
+				  System.out.println("Adding new admin option status : " + n);
+				
+			      if(n == 1)
+			    	  return "success";
+			      else
+			    	  return "failure" ;
+			      
+			}catch(Exception e){
+		    	e.printStackTrace();
+				return "Error occured";
+			}
+		}
+			//
+			//
+			//
+			//http://localhost:8080/TicketSystem/rest/bugAPI/getAddBugInfo
+			//Description: This is invoked to add new admin option.
+			//Returns    : Returns status of the insert query.
+			@GET
+			@Path("/getAddBugInfo")
+		    @Produces(MediaType.APPLICATION_JSON)
+			public String addAdminOption(){
+				
+    			BasicDBObject queryObj;
+				utilObj = (UtilityInterface)context.getBean("utilityBean");		
+				mongoDriver = (MongoDriverInterface)context.getBean("mongoDriverBean");
 						
+				try{
+					  //Getting the MongoDB Object(Only format accepted by mongoDB) for retrieving the details
+					  //about Available bug id, project, category, priority, team and status.
+					  queryObj = utilObj.getAddBugInfoDBObject();
+					  
+		              //Executing the query.
+					  DBCursor cur = mongoDriver.getBugDetails(queryObj);
+					  
+					  AddBugInfo infoBug = utilObj.getAddBugInfoObjectFromDBCursor(context, cur);
+
+                      //Returning the details in JSON format.
+					  return new Gson().toJson(infoBug);
+				      
+				}catch(Exception e){
+			    	e.printStackTrace();
+					return "Error occured";
+				}						
 	}
 	
 /*	//Exception handling

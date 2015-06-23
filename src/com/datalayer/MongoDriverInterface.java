@@ -15,6 +15,5 @@ public interface MongoDriverInterface {
     int updateBug(BasicDBObject[] updateQueryDBObject);
     public DBCursor getBugList();
 	void cleanUpResources();
-	void queryData();
 	DBCursor getBugDetails(BasicDBObject searchBugParams);	
 }

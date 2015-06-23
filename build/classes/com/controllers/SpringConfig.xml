@@ -6,15 +6,23 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     
        
     <bean id="newBugBean" class = "com.beans.Bug" scope = "prototype"></bean>
+    <bean id="addBugInfoBean" class = "com.beans.AddBugInfo" scope = "prototype"></bean>
+    <bean id="bugDetailsBean" class = "com.beans.BugDetails" scope = "prototype"></bean>
     
     <bean id="utilityBean" class = "com.beans.Utility" scope = "singleton"></bean>
     
-    <bean id="mongoDriverBean" class = "com.datalayer.MongoDriver" scope = "singleton">
+ <!--    <bean id="mongoDriverBean" class = "com.datalayer.MongoDriver" scope = "singleton"> 
+       <property name="uri" value="mongodb://testuser1:ZxCvBnM@ds037262.mongolab.com:37262/ticketsystemdb"/>
+       <property name="collection" value="tickets"/>
+    </bean> -->
     
-    <property name="uri" value="mongodb://testuser1:ZxCvBnM@ds037262.mongolab.com:37262/ticketsystemdb"/>
-    <property name="collection" value="tickets"/>
+    <bean id="mongoDriverBean" class = "com.datalayer.MongoDriver" scope = "singleton"> 
+       <property name="mongoServer" value="localhost"/>
+       <property name="portNo" value="27017"/>
+       <property name="devDatabase" value="test"/>
+       <property name="collection" value="tickets"/>
     </bean>
-    
+        
       
     </beans>
     

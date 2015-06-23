@@ -1,37 +1,64 @@
-
-<div ng-controller = "adminOptionsController">
-<table class="tableSize">
+ <div ng-controller = "adminOptionsController">
+   <div class="well">Click <mark><strong>User</strong></mark> to navigate to User Options page to view Bug list and add/update Bugs.</div>
+  <table class="tableSize">
 	<tr>
 		<td width="30%"><label for="createProject">Create New Project</label></td>
-		<td width="40%"><input type="text" class="form-control" id="projectName" placeholder="Project Alpha"></td>
-		<td width="20%"><button type="submit" class="btn btn-default button">Add Project</button></td>
+		<td width="40%"><input ng-model="newProject" type="text" class="form-control" placeholder="Project Alpha"></td>
+		<td width="20%"><button type="button" class="btn btn-default button" ng-click="addProject()">Add Project</button></td>
 	</tr>
 	<tr>
 		<td width="30%"><label for="createCategory">Create New Category</label></td>
-		<td width="40%"><input type="text" class="form-control" id="categoryName" placeholder="Internal Issues"></td>
-		<td width="20%"><button type="submit" class="btn btn-default button">Add Category</button></td>
+		<td width="40%"><input type="text" ng-model="newCategory" class="form-control" placeholder="Internal Issues"></td>
+		<td width="20%"><button type="button" class="btn btn-default button" ng-click="addCategory()">Add Category</button></td>
 	</tr>
 	<tr>
 		<td width="30%"><label for="createPriority">Create New Priority Level</label></td>
-		<td width="40%"><input type="text" class="form-control" id="priorityName" placeholder="Level 4"></td>
-		<td width="20%"><button type="submit" class="btn btn-default button">Add Priority</button></td>
+		<td width="40%"><input type="text" ng-model="newPriority" class="form-control" placeholder="Level 4"></td>
+		<td width="20%"><button type="button" class="btn btn-default button" ng-click="addPriority()">Add Priority</button></td>
 	</tr>
 	<tr>
 		<td width="30%"><label for="createCategory">Create New Team Member</label></td>
-		<td width="40%"><input type="text" class="form-control" id="memberName" placeholder="John Winans"></td>
-		<td width="20%"><button type="submit" class="btn btn-default button">Add New Member</button></td>
+		<td width="40%"><input type="text" ng-model="newMember" class="form-control" placeholder="John Winans"></td>
+		<td width="20%"><button type="button" class="btn btn-default button" ng-click="addTeamMember()">Add New Member</button></td>
 	</tr>
 		<tr>
 		<td width="30%"><label for="createCategory">Create New Status</label></td>
-		<td width="40%"><input type="text" class="form-control" id="statusName" placeholder="Resolved"></td>
-		<td width="20%"><button type="submit" class="btn btn-default button">Add Status</button></td>
+		<td width="40%"><input type="text" ng-model="newStatus" class="form-control" placeholder="Resolved"></td>
+		<td width="20%"><button type="button" class="btn btn-default button" ng-click="addStatus()">Add Status</button></td>
 	</tr>
-	</tr>
-		<tr>
-		<td width="30%"><label for="createCategory">Create New Status</label></td>
-		<td width="40%"><input type="text" class="form-control" id="statusName" placeholder="Resolved"></td>
-		<td width="20%"><button type="submit" class="btn btn-default button">Add Status</button></td>
-	</tr>
+ </table>
+ 
+<!-- Modal for prompting the status of the operation. -->
+<div class="modal fade" id="exampleModal" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel" align="center"></h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <h4 class="modal-message" align="center" ng-style = {color:'#DA4453'}></h4>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal" ng-style = {width:'60px'}>Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<button type="button" id="successMsg" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-status = "New option saved sucessfully. Future/Existing tickets can be updated with this new option." ng-show = "false"></button>
+<button type="button" id="failureMsg" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-status = "Saving new option failed, please retry. Sorry for any inconvenience caused." ng-show = "false"></button>
 
-</table>
+<script>
+/*Binding the events for the status message buttons.*/
+$('#exampleModal').on('show.bs.modal', function (event) {
+  var modal = $(this);
+  var button = $(event.relatedTarget);
+  var statusMsg = button.data('status');
+  modal.find('.modal-title').text('Thanks for using Ticket Management System.');
+  modal.find('.modal-message').text(statusMsg);
+});
+</script>
 </div>

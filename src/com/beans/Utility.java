@@ -88,7 +88,7 @@ public class Utility implements UtilityInterface{
 	//
 	//Function Name: getBugObjectsFromDBCursor(ApplicationContext context, DBCursor dbCursor)
 	//Parameters   : (ApplicationContext, DBCursor) ApplicationContext to instantiate new bug object and DBCursor to pull the details from.
-	//Description  : Create Bug objects and return.
+	//Description  : Returns list of Bug objects from the DBCursor(returned by mongoDB).
 	public List<Bug> getBugObjectsListFromDBCursor(ApplicationContext context, DBCursor dbCursor) throws Exception{
 		 
 		List<Bug> bugList = new <Bug>ArrayList();
@@ -103,6 +103,9 @@ public class Utility implements UtilityInterface{
 			while(dbCursor.hasNext()){
 					 
 			  doc = dbCursor.next();
+			  if(!doc.containsField("bugId")){
+				  continue;
+			  }
 			  for(Field eachMember : fields)	
 				eachMember.set(bugObj, doc.get(eachMember.getName()));
 			  
@@ -156,11 +159,8 @@ public class Utility implements UtilityInterface{
 	//Description  : Generates DBObject to enquire mongoDB for the next available Bug ID.   
 	public BasicDBObject getBugIDDBObject() throws Exception{
 		
-		BasicDBObject obj = new BasicDBObject();	
 		//Passing the unique _id (primary key) where next available bug id is present.
-		obj.put("_id", "bugSequence");
-		
-		return obj;
+		return new BasicDBObject("_id", "addBugInfo");	
 	}
 	//
 	//
@@ -175,7 +175,7 @@ public class Utility implements UtilityInterface{
 		//Passing through the cursor to find the next available bug id.
 		while(cur.hasNext()){  
 			doc = cur.next();
-			nextAvailBugId = doc.get("nextBugId").toString();
+			nextAvailBugId = doc.get("nextAvailBugId").toString();
 		}
 		
 		return nextAvailBugId;
@@ -189,17 +189,73 @@ public class Utility implements UtilityInterface{
 	public BasicDBObject[] getIncrementBugSeqDBObject() throws Exception{
 		
 		//Building the query object where nextAvailable sequence is found. 
-		BasicDBObject searchParams = new BasicDBObject();
-		searchParams.put("_id", "bugSequence");
-		
+		BasicDBObject queryParamsDBObj = new BasicDBObject("_id", "addBugInfo");		
 		//Building the options object which increments the existing bug sequence.
-		BasicDBObject updateParams = new BasicDBObject();
-		updateParams.put("$inc", new BasicDBObject("nextBugId", 1));
+		BasicDBObject updateParamsObj = new BasicDBObject("$inc", new BasicDBObject("nextAvailBugId", 1));
 		
-		BasicDBObject[] queryObj = new BasicDBObject[]{searchParams, updateParams};
+		BasicDBObject[] queryObj = new BasicDBObject[]{queryParamsDBObj, updateParamsObj};
 		
 		return queryObj;
 	}
+	//
+	//
+	//
+	//Function Name: getAddAdminOptionDBObject(String optionName, String value)
+	//Parameters   : optionName represents the option type and value which is the new value that has to be added.
+	//Description  : Returns the query obj to add new value for the selected option(project/team member/status/etc). 
+	public BasicDBObject[] getAddAdminOptionDBObject(String optionName, String value) throws Exception{
+		
+		//Building the search parameter object.
+		BasicDBObject searchParamsObj = new BasicDBObject("_id", "addBugInfo");
+		//Building the new parameter object.
+		BasicDBObject updateParamnsObj = new BasicDBObject("$push",  new BasicDBObject(optionName, value));
+
+		return new BasicDBObject[]{searchParamsObj, updateParamnsObj};
+	}
+	//
+	//
+	//
+	//Function Name: getAddBugInfoDBObject()
+	//Parameters   : None.
+	//Description  : Returns the query obj to get addBugInfo like nextAvailableBugId,
+	//               list of project's, category's, status's, priority's and team members pressent in mongoDB. 
+	public BasicDBObject getAddBugInfoDBObject() throws Exception{
+		
+		return new BasicDBObject("_id", "addBugInfo");
+	}
+	//
+	//
+	//
+	//Function Name: getAddBugInfoObjectFromDBCursor(ApplicationContext context, DBCursor dbCursor)
+	//Parameters   : (ApplicationContext, DBCursor) ApplicationContext to instantiate new bug object and DBCursor to pull the details from.
+	//Description  : Returns AdminInfo object from the DBCursor(returned by mongoDB).
+	public AddBugInfo getAddBugInfoObjectFromDBCursor(ApplicationContext context, DBCursor dbCursor) throws Exception{
+		 
+		List<Bug> bugList = new <Bug>ArrayList();
+		DBObject doc;
+		//Getting new Bug Object through Spring.
+		AddBugInfo adminInfoObj = (AddBugInfo)context.getBean("addBugInfoBean");
+			
+        //Adding the retrieved details to the new bug object using Java Reflection API.	
+		Field[] fields = adminInfoObj.getClass().getDeclaredFields();	
+		
+		try{		
+			while(dbCursor.hasNext()){ 
+			      doc = dbCursor.next();
+			      for(Field eachMember : fields)	
+				     eachMember.set(adminInfoObj, doc.get(eachMember.getName()));
+                  break;			  
+			}
+		}catch(IllegalAccessException e){
+			e.printStackTrace();
+		}
+
+      return adminInfoObj;
+	}
+	//
+	//
+	//
+
 
 }
 

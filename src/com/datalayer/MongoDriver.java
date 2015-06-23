@@ -20,14 +20,18 @@ public class MongoDriver implements MongoDriverInterface {
 		// TODO Auto-generated constructor stub
 	}
 	
-	//Making the below Database connection strings configurable using .
+	//Making the below Database connection strings configurable using Spring constructor based injection.
 	private MongoClientURI uri;
 	private MongoClient client;
 	private DB db;
 	private DBCollection collection;
+	//Below two data members for DEV mongoDB server use only.
+	private String mongoServer;
+	private int portNo;
 
-	//Setting the members using Spring constructor based injection.
-	public void setUri(String connectionString) {
+	/************************PRODUCTION DB Connection starts*************************/
+	//Database Connection setting using Spring method based injection.
+	/*public void setUri(String connectionString) {
 		this.uri = new MongoClientURI(connectionString);
 		this.client = new MongoClient(this.uri);
 		this.db = this.client.getDB(uri.getDatabase()); 
@@ -35,8 +39,28 @@ public class MongoDriver implements MongoDriverInterface {
 
 	public void setcollection(String collectionName) {
 		this.collection = db.getCollection(collectionName);
+	}*/
+	/************************PRODUCTION DB Connection ends****************************/
+	
+	/************************DEV DB Connection starts*********************************/
+	//Database Connection setting the members using Spring method based injection.
+	public void setMongoServer(String serverName) {
+		this.mongoServer = serverName;
 	}
 	
+	public void setPortNo(String portNo) {
+		this.portNo = Integer.valueOf(portNo);
+	}
+	
+	public void setDevDatabase(String dbName){
+		this.client = new MongoClient(this.mongoServer, this.portNo);
+		this.db = this.client.getDB(dbName);
+	}
+
+	public void setcollection(String collectionName) {
+		this.collection = db.getCollection(collectionName);
+	}
+	/************************DDEV DB Connection ends*********************************/
 
 	//Description : This function is used to add New Bug into the database. 
 	//Parameters  : bugDetails
@@ -78,8 +102,7 @@ public class MongoDriver implements MongoDriverInterface {
 		
 	}
 	
-	
-	public void queryData(){
+	/*	public void queryData(){
 		
 		//db.collection.find(query, projection)
 		//Format : db.collection.find(query, projection).limit(5) - last one cursor modifier.
@@ -96,7 +119,7 @@ public class MongoDriver implements MongoDriverInterface {
 
 		}
 
-	}
+	}*/
 	
 	public void cleanUpResources(){
 	 	 //cleaning up resources

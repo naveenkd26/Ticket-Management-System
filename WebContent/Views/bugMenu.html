@@ -1,17 +1,25 @@
 
     <div ng-controller="bugMenuController">
-    <ul class="list-inline">
-      <li><a href="#/userOptions/listBugs"><button type="button" class="btn btn-primary" ng-click="listBugs()">Bugs</button></a></li>
-      <li><a href="#/userOptions/addBug"><button type="button" class="btn btn-primary" ng-click="addBug()">Add Bug</button></a></li>
-      <!--<li><a href="#/userOptions/searchBug"><button type="button" class="btn btn-primary" ng-click="searchBug()">Search Bug</button></a></li> -->
-    </ul>
-    <div ui-view></div>
-    <div class="instructions" ng-show = "showInstructions">
-    	Instruction
+    <div class="well">Click <mark><strong>Bugs</strong></mark> to view list of bugs, <mark><strong>Add Bug</strong></mark> to add new bug and <mark><strong>Admin Settings</strong></mark> to add new option for Project/Category/Priority/Status.</div>
+    <div class="instructions" ng-show = "false">
     	<ul>
     		<li>Please lick on the <mark><strong>Bugs</strong></mark> button to view list of bugs. </li>
     		<li>Please lick on the <mark><strong>Add Bugs</strong></mark> button to view create new bug. </li>
     		<li>Please lick on the <mark><strong>Search</strong></mark> button to search for a bug. </li>
     	</ul>
     </div>
+    <ul class="list-inline">
+      <li><a href="#/userOptions/listBugs"><button type="button" class="btn btn-primary" ng-click="listBugs()">Bugs</button></a></li>
+      <li><a href="#/userOptions/addBug"><button type="button" class="btn btn-primary" ng-click="addBug()">Add Bug</button></a></li>
+      <!--<li><a href="#/userOptions/searchBug"><button type="button" class="btn btn-primary" ng-click="searchBug()">Search Bug</button></a></li> -->
+    </ul>
+    <div ui-view></div>
+<!--<div class="instructions" ng-show = "showInstructions">
+    	Instruction
+    	<ul>
+    		<li>Please click on the <mark><strong>Bugs</strong></mark> button to view list of bugs. </li>
+    		<li>Please click on the <mark><strong>Add Bugs</strong></mark> button to view create new bug. </li>
+    		<li>Please click on the <mark><strong>Search</strong></mark> button to search for a bug. </li>
+    	</ul>
+    </div> -->
    </div> 
