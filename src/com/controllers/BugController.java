@@ -30,7 +30,7 @@ import java.util.HashMap;
 @Path("bugAPI")
 public class BugController {
 	
-	ApplicationContext context = new ClassPathXmlApplicationContext("com/controllers/SpringConfig.xml");
+	ApplicationContext context = new ClassPathXmlApplicationContext("SpringConfig.xml");
 	UtilityInterface utilObj;
 	MongoDriverInterface mongoDriver;
 	Gson gson;

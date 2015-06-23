@@ -5,7 +5,7 @@
 		
 	var DEV_ENV = 'http://localhost:8080/TicketSystem/rest/bugAPI/';
 	var PROD_ENV = 'http://naveenjavaapplications-ticketsystem.rhcloud.com/TicketSystem/rest/bugAPI/';
-	var ENV = DEV_ENV;
+	var ENV = PROD_ENV;
 	
 	$(window).load(function() {
 		// Animate loader off screen

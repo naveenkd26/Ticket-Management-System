@@ -31,7 +31,7 @@ public class MongoDriver implements MongoDriverInterface {
 
 	/************************PRODUCTION DB Connection starts*************************/
 	//Database Connection setting using Spring method based injection.
-	/*public void setUri(String connectionString) {
+	public void setUri(String connectionString) {
 		this.uri = new MongoClientURI(connectionString);
 		this.client = new MongoClient(this.uri);
 		this.db = this.client.getDB(uri.getDatabase()); 
@@ -39,11 +39,11 @@ public class MongoDriver implements MongoDriverInterface {
 
 	public void setcollection(String collectionName) {
 		this.collection = db.getCollection(collectionName);
-	}*/
+	}
 	/************************PRODUCTION DB Connection ends****************************/
 	
 	/************************DEV DB Connection starts*********************************/
-	//Database Connection setting the members using Spring method based injection.
+/*	//Database Connection setting the members using Spring method based injection.
 	public void setMongoServer(String serverName) {
 		this.mongoServer = serverName;
 	}
@@ -59,7 +59,7 @@ public class MongoDriver implements MongoDriverInterface {
 
 	public void setcollection(String collectionName) {
 		this.collection = db.getCollection(collectionName);
-	}
+	}*/
 	/************************DDEV DB Connection ends*********************************/
 
 	//Description : This function is used to add New Bug into the database. 
@@ -101,25 +101,6 @@ public class MongoDriver implements MongoDriverInterface {
 		return bugList;
 		
 	}
-	
-	/*	public void queryData(){
-		
-		//db.collection.find(query, projection)
-		//Format : db.collection.find(query, projection).limit(5) - last one cursor modifier.
-		//Sample : db.tickets.find(new BasicDBObject("bugId":"1345"));	
-		BasicDBObject obj = new BasicDBObject();
-		obj.put("bugId", "1678");
-		
-		//DBCursor results = collection.find(new BasicDBObject("bugId", "1678"));
-		DBCursor results = collection.find(obj);
-		DBObject doc;
-		while(results.hasNext()){
-		  doc = results.next();
-		  	  System.out.println(doc.get("bugId") + "   " + doc.get("bugName") + "   " + doc.get("projectName") + "   " +  doc.get("category") + "   " +  doc.get("priority") + "   " +  doc.get("teamMember") + "   " +  doc.get("status") + "   " +  doc.get("comments"));
-
-		}
-
-	}*/
 	
 	public void cleanUpResources(){
 	 	 //cleaning up resources

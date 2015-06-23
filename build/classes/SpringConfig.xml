@@ -12,18 +12,18 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     <bean id="utilityBean" class = "com.beans.Utility" scope = "singleton"></bean>
     
  <!-- Production Environment for mongoDB in Mongolab (Remote) -->
- <!-- <bean id="mongoDriverBean" class = "com.datalayer.MongoDriver" scope = "singleton"> 
+    <bean id="mongoDriverBean" class = "com.datalayer.MongoDriver" scope = "singleton"> 
        <property name="uri" value="mongodb://testuser1:ZxCvBnM@ds037262.mongolab.com:37262/ticketsystemdb"/>
        <property name="collection" value="tickets"/>
-    </bean> -->
+    </bean>
     
   <!-- Development Environment for mongoDB in local -->
-    <bean id="mongoDriverBean" class = "com.datalayer.MongoDriver" scope = "singleton"> 
+    <!-- <bean id="mongoDriverBean" class = "com.datalayer.MongoDriver" scope = "singleton"> 
        <property name="mongoServer" value="localhost"/>
        <property name="portNo" value="27017"/>
        <property name="devDatabase" value="test"/>
        <property name="collection" value="tickets"/>
-    </bean>
+    </bean> -->
         
       
     </beans>
