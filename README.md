@@ -1,7 +1,7 @@
 # Ticket-Management-System
-Ticket-Management-System is a Single Page application developed by using Open source technologies **AngularJS (UI-router module), Java, Spring Framework, REST Web Services and NoSQL:MongoDB (mongolab).** 
+Ticket-Management-System is a Single Page application developed by using Open source technologies **AngularJS (UI-router module), Java, Spring Framework, REST Web Services, NoSQL:MongoDB (mongolab) and Bootstrap.** 
 
-This application can be used by any software team to keep track of the Bugs/Tickets that might arise in the application. Each new Bug will be assigned to a particular Project and a Team member who will be responsible to update the status of the Bug between New/Resolved in DEV/Pushed to Staging/Testing/Closed/Reopened.
+This application can be used by any software team to keep track of the Bugs/Tickets that might arise during Sofware Development Life Cycle. Each new Bug will be assigned to a particular Project and a Team member who will be responsible to update the status of the Bug between New/Resolved in DEV/Pushed to Staging/Testing/Closed/Reopened.
 
 Following are the mandatory details that has to be provided while adding a new Bug.
 1. Bug id#
@@ -12,10 +12,10 @@ Following are the mandatory details that has to be provided while adding a new B
 6. Status
 7. Comments (Optional)
 
-####Two sections present in the application
-#####User options  :
+####Two sections present in the application (Option pane present in the left side of the page)
+#####User section - User:
 This section allows user to add new Bug and update details of existing Bug. All of the details except Bug id# and Bug Name can be updated.
-#####Adimin Section: 
+#####Admin Section - Admin Settings: 
 This section allows user to configure Bug details i.e., user can add new Project/Category/Priority/Team member/Status, which can be selected while adding/updating new/existing bugs in Users options section.
 
 ---
@@ -59,4 +59,8 @@ src/com/datalayer/MongoDriverInterface.java
    public void setcollection(String collectionName);
    public void cleanUpResources();
 ```
+
+####Work in progress
+1. Validitation for blank options before adding new option in Admin section.
+2. Check whether or not the new option for Project/Category/Priority/Team member/Status already exists before adding saving it to MongoDB.
 
