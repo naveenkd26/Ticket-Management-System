@@ -3,39 +3,40 @@
 <table class="newBugTableProps" border="0" cellpadding="10">
 	<tr class="tableRow">
 		<td width="30%"><label for="bugId">Bug id#</label></td>
-		<td width="40%"><input ng-model = "bugId" type="text" class="form-control" placeholder="" ng-disabled = "true"></td>
+		<td width="40%"><input ng-model = "bugId" type="text" class="form-control" placeholder="" ng-disabled = "true" ></td>
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="bugName">Name</label></td>
-		<td width="40%"><input type="text" class="form-control" ng-model = "bugName" placeholder=""></td>
+ 		<td width="40%"><input type="text" required = "true" class="form-control" ng-model = "bugName" placeholder="Please enter Bug Name/Description here." ng-change="changeEvent()"></td>
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="projectName">Project</label></td>
-		<td width="40%"><select class="form-control" ng-model = "projectName" ng-options = "eachProject for eachProject in projects"></select></td>
-	</tr>
+		<td width="40%"><select class="form-control" ng-model = "projectName" ng-options = "eachProject for eachProject in projects" ng-change="changeEvent()" ng-selected=""></select></td>
+	</div></tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="category">Category</label></td>
-		<td width="40%"><select class="form-control" ng-model = "category" ng-options ="eachCategory for eachCategory in categorys"></select></td>
+		<td width="40%"><select class="form-control" ng-model = "category" ng-options ="eachCategory for eachCategory in categorys" ng-change="changeEvent()"></select></td>
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="priority">Priority</label></td>
-		<td width="40%"><select class="form-control" ng-model = "priority" ng-options ="eachPriority for eachPriority in prioritys"></select></td>
+		<td width="40%"><select class="form-control" ng-model = "priority" ng-options ="eachPriority for eachPriority in prioritys" ng-change="changeEvent()"></select></td>
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="teamMember">Assigned to</label></td>
-		<td width="40%"><select class="form-control" ng-model = "teamMember" ng-options ="eachMember for eachMember in teamMembers"></select></td>
+		<td width="40%"><select class="form-control" ng-model = "teamMember" ng-options ="eachMember for eachMember in teamMembers" ng-change="changeEvent()"></select></td>
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="status">Status</label></td>
-		<td width="40%"><select class="form-control" ng-model = "status" ng-options ="eachStatus for eachStatus in statuses"></select></td>
+        <td width="40%"><select class="form-control" ng-model = "status" ng-options ="eachStatus for eachStatus in statuses" ng-change="changeEvent()"></select></td>
 	</tr>
 	<tr class="tableRow">
-		<td width="30%"><label for="description">Comments</label></td>
-		<td width="40%"><textarea class="form-control" rows="3" ng-model = "comments"></textarea></td>
+		<td width="30%"><label for="description">Comments(Optional)</label></td>
+		<td width="40%"><textarea class="form-control" rows="3" ng-model = "comments" ng-change="changeEvent()"></textarea></td>
 	</tr>
 		<tr class="tableRow">
-		<td colspan="2"><button type="button" ng-click="addNewBug()" class="btn btn-primary button-center">Add Bug</button>&nbsp&nbsp&nbsp<button type="button" ng-click="resetBugDetails()" class="btn btn-primary button-center">Reset</button></td>
+		<td colspan="2"><button type="button" ng-click="addNewBug()" class="btn btn-primary button-center" ng-disabled = "addBtnDisabled">Add Bug</button>&nbsp&nbsp&nbsp<button type="button" ng-click="resetBugDetails()" class="btn btn-primary button-center">Reset</button></td>
 	</tr>
+
 
 </table>
 

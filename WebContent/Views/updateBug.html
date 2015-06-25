@@ -11,30 +11,30 @@
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="projectName">Project</label></td>
-		<td width="40%"><select class="form-control" ng-model = "projectName" ng-options = "eachProject for eachProject in projects"></select></td>
+		<td width="40%"><select class="form-control" ng-model = "projectName" ng-options = "eachProject for eachProject in projects" ng-change="changeEvent()"></select></td>
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="category">Category</label></td>
-		<td width="40%"><select class="form-control" ng-model = "category" ng-options ="eachCategory for eachCategory in categorys"></select></td>
+		<td width="40%"><select class="form-control" ng-model = "category" ng-options ="eachCategory for eachCategory in categorys" ng-change="changeEvent()"></select></td>
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="priority">Priority</label></td>
-		<td width="40%"><select class="form-control" ng-model = "priority" ng-options ="eachPriority for eachPriority in prioritys"></select></td>
+		<td width="40%"><select class="form-control" ng-model = "priority" ng-options ="eachPriority for eachPriority in prioritys" ng-change="changeEvent()"></select></td>
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="teamMember">Assigned to</label></td>
-		<td width="40%"><select class="form-control" ng-model = "teamMember" ng-options ="eachMember for eachMember in teamMembers"></select></td>
+		<td width="40%"><select class="form-control" ng-model = "teamMember" ng-options ="eachMember for eachMember in teamMembers" ng-change="changeEvent()"></select></td>
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="status">Status</label></td>
-		<td width="40%"><select class="form-control" ng-model = "status" ng-options ="eachStatus for eachStatus in statuses"></select></td>
+		<td width="40%"><select class="form-control" ng-model = "status" ng-options ="eachStatus for eachStatus in statuses" ng-change="changeEvent()"></select></td>
 	</tr>
 	<tr class="tableRow">
 		<td width="30%"><label for="description">Comments</label></td>
-		<td width="40%"><textarea class="form-control" rows="3" ng-model = "comments"></textarea></td>
+		<td width="40%"><textarea class="form-control" rows="3" ng-model = "comments" ng-change="changeEvent()"></textarea></td>
 	</tr>
 		<tr class="tableRow">
-		<td colspan="2"><button type="button" ng-click="updateBug()" class="btn btn-primary button-center" ng-disabled = updateOptionDisabled>Update</button></td>
+		<td colspan="2"><button type="button" ng-click="updateBug()" class="btn btn-primary button-center" ng-disabled = disableUpdateBtn>Update</button></td>
 	</tr>
 </table>
 

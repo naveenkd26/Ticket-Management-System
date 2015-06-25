@@ -1,25 +1,16 @@
 (function(){
 
-   console.log("Angular compiling starts.");
-	var myApp = angular.module('ticketSystemApp', ["ui.router"]);
-		
+    //console.log("Angular compiling starts.");
+	var myApp = angular.module('ticketSystemApp', ["ui.router"]);	
 	var DEV_ENV = 'http://localhost:8080/TicketSystem/rest/bugAPI/';
 	var PROD_ENV = 'http://naveenjavaapps-ticketsystem.rhcloud.com/TicketSystem/rest/bugAPI/';
-	var ENV = PROD_ENV;
+	var ENV = DEV_ENV;
 	
 	$(window).load(function() {
 		// Animate loader off screen
 		$(".se-pre-con").fadeOut("slow");
 		$(".spinner").hide();
 	});
-	
-	$('#exampleModal').on('show.bs.modal', function (event) {
-		  var modal = $(this);
-		  var button = $(event.relatedTarget);
-		  var statusMsg = button.data('status');
-		  modal.find('.modal-title').text('Thanks for using Ticket Management System.');
-		  modal.find('.modal-message').text(statusMsg);
-		});
 	     
      //Routing for the nested views starts.
      myApp.config(function($stateProvider, $urlRouterProvider){
@@ -62,10 +53,10 @@
         .state('bugMenu.updateBug', {
               url: "/updateBug/:bugId",
               templateUrl: "updateBug.html",
-              controller: "updateBugController",
-              onEnter: function(){
+              controller: "updateBugController"
+              /* onEnter: function(){
                  console.log("This is in updateBug onEnter state.");
-              }
+              }*/
           })        
         //States to navigate back to listBugs, addBug sections from updateBug view using bugMenu options.
         //Reason: Once we enter into the updateBug view, the state changes from userOptions state to bugMenu state,
@@ -89,24 +80,19 @@
     // bugMenuController starts.
      myApp.controller("bugMenuController", ['$scope', 'bugRepository', 'bugObject', function($scope, bugRepository, bugObject){
 
-       console.log("In the bug Menu controller");
-      
-        $scope.showInstructions = true;
+       //console.log("In the bug Menu controller");    	 
        //Handling bugMenu events.
        $scope.listBugs = function(){
-          console.log("List Bugs button clicked");
-          $scope.hideInstruction();
+          //$scope.hideInstruction();
        };
        
-       //Function whick gets triggered when AddBug option is selected. 
+       //Function which gets triggered when AddBug option is selected. 
        $scope.addBug = function(){        
-          console.log("Add Bug button clicked");
-          $scope.hideInstruction();
+          //$scope.hideInstruction();
        };
 
        $scope.searchBug = function(){
-          console.log(" Search Bug button clicked");
-          $scope.hideInstruction();
+         //$scope.hideInstruction();
        };
 
        //Function to hide the instructions in the bugMenu view.
@@ -115,7 +101,7 @@
         };
 
      }]);
-    // bugMenuController ends.
+    //bugMenuController ends.
 
 
      // Repository class which makes all the REST calls starts.
@@ -126,20 +112,17 @@
                
     		             //Showing the spinner before the AJAX call.
 	                     $('.spinner').show();
-                        console.log("This is in addBug bugRepo function.");
-                        console.log("Below are the new bug details.");
-                        var bugDetails = JSON.stringify(newBugObject);
-                        console.log(bugDetails);
+                         var bugDetails = JSON.stringify(newBugObject);
+                         //console.log(bugDetails);
                         $http.post(ENV + 'addbug/' + bugDetails)
                          .success(function(data, status, headers, config) {
                         	   //Hiding the spinner once we receive the response. 
                      	       $('.spinner').hide();  
-                        	   //console.log("This is in rest call success function");
                                callback(data); 
                           }).error(function(data, status, headers, config) {
                         	   //Hiding the spinner once we receive the response. 
                        	       $('.spinner').hide();
-                               console.log("addBug web call failed.");
+                               //console.log("addBug web call failed.");
                                callback("Error occured");
                           });
                   },
@@ -147,61 +130,51 @@
                         
                         //Showing the spinner before the AJAX call.
                         $('.spinner').show();
-        	            console.log("This is in update bugRepo function.");
-                        console.log("Below are the update bug details.");
                         var modifiedDetails = JSON.stringify(newDetailsObj);
-                        console.log(modifiedDetails);
+                        //console.log(modifiedDetails);
                         $http.put(ENV + 'updatebug/' + modifiedDetails)
                          .success(function(data, status, headers, config) {
                         	   //Hiding the spinner once we receive the response. 
                      	       $('.spinner').hide();  
-                        	   //console.log("This is in update bug success function");
                                callback(data); 
                           }).error(function(data, status, headers, config) {
                         	   //Hiding the spinner once we receive the response. 
                         	   $('.spinner').hide();
-                               console.log("updateBug web call failed.");
+                               //console.log("updateBug web call failed.");
                                callback("Error occured");
                           });
                   },
 
          getBugList: function(callback){
         	 
-                         $('#temp').click();
         	             //Showing the spinner before the AJAX call.
         	             $('.spinner').show();
-        	             console.log("This is in getBugLis bugRepo function.");
-                         console.log(ENV);
-                        $http.get(ENV + 'getbuglist')
+                         $http.get(ENV + 'getbuglist')
                          .success(function(data, status, headers, config) {
                         	   //Hiding the spinner once we receive the response. 
                         	   $('.spinner').hide();
-                        	   console.log("Loaded bug list Sucessfully.");
                                callback(data); 
                           }).error(function(data, status, headers, config) {
                        	       //Hiding the spinner once we receive the response. 
+                               callback("Error occured");
                        	       $('.spinner').hide();
-                               callback("Error occured"); 
                           });         
                       }, 
 
         getBugDetails: function(searchParamsObj, callback){
 
                          //Showing the spinner before the AJAX call.
-                         $('.spinner').show();
-                         console.log("This is in getBugDetails bugRepo function. BugId:  " + searchParamsObj.bugId);       
+                         $('.spinner').show();  
                          var searchParams = JSON.stringify(searchParamsObj);
-                         console.log(searchParams);
+                         //console.log(searchParams);
                          $http.get(ENV + 'getbugdetails/' + searchParams)
                          .success(function(data, status, headers, config) {
-                               console.log("This is in getBugDetails success function. Data : " + data);
                         	   //Hiding the spinner once we receive the response. 
                        	       $('.spinner').hide();
                                callback(data); 
                           }).error(function(data, status, headers, config) {
                         	   //Hiding the spinner once we receive the response. 
                         	   $('.spinner').hide();
-                               console.log("getBugDetails web call failed.");
                                callback("Error occured");
                           });
                       },
@@ -212,14 +185,12 @@
                           $('.spinner').show();
                           $http.get(ENV + 'getAddBugInfo')
                           .success(function(data, status, headers, config) {
-                                console.log("This is in getAddBugInfo success function. Data : " + data);
-                         	   //Hiding the spinner once we receive the response. 
-                        	       $('.spinner').hide();
+                         	    //Hiding the spinner once we receive the response. 
+                        	    $('.spinner').hide();
                                 callback(data); 
                            }).error(function(data, status, headers, config) {
-                         	   //Hiding the spinner once we receive the response. 
-                         	   $('.spinner').hide();
-                                console.log("getAddBugInfo web call failed.");
+                         	    //Hiding the spinner once we receive the response. 
+                         	    $('.spinner').hide();
                                 callback("Error occured");
                            });
                        },
@@ -247,18 +218,15 @@
 
                            //Showing the spinner before the AJAX call.
                            $('.spinner').show();
-         	              console.log("This is in addNewAdminOption bugRepo function.");  
                            $http.put(ENV + 'addAdminOption/' + newAdminOption)
                            .success(function(data, status, headers, config) {
-                                 console.log("This is in addNewAdminOption success function. Data : " + data);
-                          	    //Hiding the spinner once we receive the response. 
-                         	    $('.spinner').hide();
+                          	     //Hiding the spinner once we receive the response. 
+                         	     $('.spinner').hide();
                                  callback(data); 
                             }).error(function(data, status, headers, config) {
                          	    //Hiding the spinner once we receive the response. 
-                            	    $('.spinner').hide();
-                                 console.log("addNewAdminOption web call failed.");
-                                 callback("Error occured");
+                            	$('.spinner').hide();
+                                callback("Error occured");
                             });
                         }              
       };    	
@@ -293,15 +261,8 @@
    // addNewBugController starts.
    myApp.controller("addNewBugController", ['$scope', 'bugRepository', 'bugObject', function($scope, bugRepository, bugObject){
     
-/*	     bugRepository.getAvailableBugId(function(resultsBack){
-             if(resultsBack.toString() == "Error occured"){
-           	  $('#fetchBugIdFailed').click();            	  
-             }else{
-    	         $scope.bugId = resultsBack.toString();   
-             }
-	     });*/
-	   
-	     bugRepository.getAddBugInfo(function(resultsBack){
+  	   //Getting the next abailable Bug Id and drop down details about Project/Team member/Priority/Status.  
+	   bugRepository.getAddBugInfo(function(resultsBack){
              if(resultsBack.toString() == "Error occured"){
            	  $('#fetchBugIdFailed').click();            	  
              }else{     	 
@@ -311,12 +272,10 @@
     	         $scope.prioritys = resultsBack.priority;
     	         $scope.teamMembers = resultsBack.teamMember;
     	         $scope.statuses = resultsBack.status;
-             }
-             
+             }           
 	     });
 	     
 	   //scope variables starts
-       //$scope.bugId = "";
        $scope.bugName = "";
        $scope.projectName = "";
        $scope.category = "";
@@ -324,12 +283,12 @@
        $scope.teamMember = "";
        $scope.status = "";
        $scope.comments = "";
+       $scope.addBtnDisabled = true;
        //scope variables ends
+       
 
-       console.log("This is in Add new bug controller....");   
+       //Handling AddBug button event.
        $scope.addNewBug = function(){
-          //console.log("Adding new bug to the DB.");
-          //$scope.hideInstruction();
  
           //Creating Bug object
           var newBugObject = new bugObject();
@@ -342,7 +301,6 @@
           newBugObject.status = $scope.status;
           newBugObject.comments = $scope.comments;
 
-          //console.log(JSON.stringify(newBug));
           bugRepository.addBug(newBugObject,function(data){
               if(data.toString() == "success"){
             	  
@@ -354,8 +312,7 @@
                    	  $('#fetchBugIdFailed').click();            	  
                      }else{
             	         $scope.bugId = parseInt(resultsBack);   
-                     }
-                     
+                     }                
          	     });  
               }else{
             	  $('#failureMsg').click();   
@@ -363,6 +320,7 @@
           });
      };
 
+     //Reset bug details.
      $scope.resetBugDetails = function(){
        $scope.bugName = "";
        $scope.projectName = "";
@@ -371,7 +329,17 @@
        $scope.teamMember = "";
        $scope.status = "";
        $scope.comments = "";     
+       $scope.addBtnDisabled = true;
      };
+     
+     //Validating for empty fields.
+     $scope.changeEvent = function(){
+  	   if(($scope.bugName == "" || $scope.bugName == undefined) || $scope.projectName == "" || $scope.category == "" || $scope.priority == "" || $scope.teamMember == "" || $scope.status == ""){
+  	  	   $scope.addBtnDisabled = true;
+   	   }else{
+  		   $scope.addBtnDisabled = false;
+  	   }    	   
+     }
 
    }]);
   // addNewBugController ends.
@@ -384,15 +352,13 @@
      
      bugRepository.getBugList(function(resultsBack){
     	 
-    console.log("Response received from getList:"+resultsBack);	 
-   	 //Checking whether the response from the server is success. 
-     if(resultsBack.toString() != "Error occured"){
-          $scope.issueList = resultsBack;      		  
-	  }else{
-    	  $('#failureMsg').click();
-	  }
-
-    });
+   	   //Checking whether the response from the server is success. 
+       if(resultsBack.toString() != "Error occured"){
+            $scope.issueList = resultsBack;      		  
+	    }else{
+      	  $('#failureMsg').click();
+	    }
+     });
     
   }]);
   // bugListController ends.
@@ -402,7 +368,6 @@
   myApp.controller("updateBugController", ['$scope','$stateParams', 'bugObject', 'findBugObject', 'bugRepository', function($scope, $stateParams, bugObject, findBugObject, bugRepository){
     
     $scope.updateOptionDisabled = false;  
-	//console.log("Bug Id for which the details are requested:  "+ $stateParams.bugId);
 	//Getting the id of the bug for which the update option is clicked.
 	var searchParamsObj = new findBugObject();
 	searchParamsObj.bugId = $stateParams.bugId;
@@ -412,14 +377,14 @@
       //Checking whether the response from the server is success. 
       if(resultsBack.toString() != "Error occured"){
 
-    	 //Setting the drop down select options.
+    	 //Setting the drop down select options to the view.
          $scope.projects = resultsBack.addBugInfo.project;
          $scope.categorys = resultsBack.addBugInfo.category;
          $scope.prioritys = resultsBack.addBugInfo.priority;
          $scope.teamMembers = resultsBack.addBugInfo.teamMember;
          $scope.statuses = resultsBack.addBugInfo.status;
     	           
-   	     //Setting the bug details received form the server.
+   	     //Setting the bug details received form the server to the view.
          $scope.bugId = resultsBack.bugDetails[0].bugId;
          $scope.bugName = resultsBack.bugDetails[0].bugName;
          $scope.projectName = resultsBack.bugDetails[0].projectName;
@@ -427,8 +392,17 @@
          $scope.priority = resultsBack.bugDetails[0].priority;
          $scope.teamMember = resultsBack.bugDetails[0].teamMember;
          $scope.status = resultsBack.bugDetails[0].status;
-         $scope.comments = resultsBack.bugDetails[0].comments;    
-          
+         $scope.comments = resultsBack.bugDetails[0].comments;
+         
+         //Saving the Bug details to check and show/hide UpdateBug option.
+         $scope.oldProjectName = $scope.projectName;
+         $scope.oldCategory = $scope.category;
+         $scope.oldPriority =  $scope.priority;
+         $scope.oldTeamMember = $scope.teamMember;
+         $scope.oldStatus = $scope.status;
+         $scope.oldComments = $scope.comments;
+         $scope.disableUpdateBtn = true;
+             
    	  }else{
        	  $('#loadFailureMsg').click();     		  
    	  }
@@ -450,23 +424,29 @@
           bug.status = $scope.status;
           bug.comments = $scope.comments;
           
-          //console.log(JSON.stringify(newBug));
+          //Handling UpdateBug button event.
           bugRepository.updateBug(bug, function(data){
         	  if(data.toString() == "1"){
+        		  $scope.disableUpdateBtn = true;
             	  $('#successMsg').click();
-            	  $scope.disableUpdateOption();
+            	  $scope.disableUpdateBtn = true;
         	  }else{
             	  $('#failureMsg').click();     		  
         	  }
-            //console.log(data);
           });
       };
       
-      $scope.disableUpdateOption = function(){
+    
+      //Validating for empty fields.
+      $scope.changeEvent = function(){
 
-    	  $scope.updateOptionDisabled = true;    		  
-
-      };
+    	  if($scope.projectName == $scope.oldProjectName && $scope.category == $scope.oldCategory && $scope.priority == $scope.oldPriority && $scope.teamMember == $scope.oldTeamMember && $scope.status == $scope.oldStatus && $scope.comments == $scope.oldComments){
+   	  	       $scope.disableUpdateBtn = true;
+     	    }else{
+   		       $scope.disableUpdateBtn = false;
+   		      //console.log(($scope.projectName == $scope.oldProjectName)  + "  " + ($scope.category == $scope.oldCategory)   + "  " + ($scope.priority == $scope.oldPriority)   + "  " + ($scope.teamMember == $scope.oldTeamMember)   + "  " + ($scope.status == $scope.oldStatus)   + "  " +  ($scope.comments == $scope.oldComments));
+   	      }    	   
+      }
       
   }]);
   // updateBugcontroller ends.
@@ -503,8 +483,7 @@
 	  $scope.newMember = ""; 
 	  $scope.newStatus = ""; 
 
-	  console.log("This is in adminOptionsController. sameold issue");
-	    
+	       //Handling Button events in Admin Section.
 	       $scope.addProject = function(){
                    $scope.addAdminOption("project", $scope.newProject);
              	   $scope.newProject = "";
@@ -527,7 +506,8 @@
             };
 
             
-	       $scope.addAdminOption = function(selectedOption, newValue){
+	       //Making AJAX call to save the new option to mongoDB.
+            $scope.addAdminOption = function(selectedOption, newValue){
 	    	       	   
 	    	   var newOption = "{\"" + selectedOption + "\":\"" + newValue +"\"}";
 	           bugRepository.addNewAdminOption(newOption,function(data){
@@ -541,6 +521,5 @@
 
 	  }]);
   // adminOptionsController ends.
-
 
 })();
