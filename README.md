@@ -1,20 +1,27 @@
 # Ticket-Management-System
 Ticket-Management-System is a Single Page application developed by using Open source technologies AngularJS (UI-router module), Java, Spring Framework, REST Web Services and NoSQL:MongoDB (mongolab). 
 
-This application can be used by any Software Team to keep track of the Bugs/Tickets that might arise in the application. Each New Bug will be assigned to a particular Project and Team member who will be responsible to update the status of the bug between New/Resolved in DEV/Pushed to Staging/Testing/Closed/Reopened.
+This application can be used by any software team to keep track of the Bugs/Tickets that might arise in the application. Each new Bug will be assigned to a particular Project and a Team member who will be responsible to update the status of the Bug between New/Resolved in DEV/Pushed to Staging/Testing/Closed/Reopened.
 
-Below are the mandatory details that has to be provided while adding a new Bug.
-Bug id#, Name, Project, Category, Priority, Assigned to, Status, Comments(Optional). All of the details except Bug id# and Name can be updated.
+Following are the mandatory details that has to be provided while adding a new Bug.
+1. Bug id#
+2. Bug Name
+3. Project
+4. Category
+5. Assigned to
+6. Status
+7. Comments (Optional)
 
-This aplication consists of two parts
+####Two sections present in the application
+#####User options  :
+This section allows user to add new Bug and update details of existing Bug. All of the details except Bug id# and Bug Name can be updated.
+#####Adimin Section: 
+This section allows user to configure Bug details i.e., user can add new Project/Category/Priority/Team member/Status, which can be selected while adding/updating new/existing bugs in Users options section.
 
-User options  : This section allows user to add new Bug and update existing Bug.
+---
+## Glimpse about implementation
 
-Adimin Section: This section allows user to configure Bug details i.e., user can add new Project/Category/Priority/Team member/Status which can be selected while adding/updating new/existing bugs in Users options section. 
-
-Glimpse about implementation
-
-
+```Java
 REST API implementation
 src/com/controllers/BugContoller.java
   public String addBug(@PathParam("bugDetails") String bugParams)
@@ -26,7 +33,8 @@ src/com/controllers/BugContoller.java
   public String addAdminOption(@PathParam("newAdminOption") String newAdminOption)
   public String getAddBugInfo()
 
-Utility class to create DBObjects (Only language understood by MongoDB)
+
+Utility class to create DBObjects, retrieve data from DBCursors (DBObject, DBCUrsors:-Only language understood by MongoDB)
 src/com/beans/UtilityInterface.java
    public BasicDBObject getAddBugDBObject(Map<String, String> bugDetails) throws Exception;
    public BasicDBObject[] getUpdateBugDBObject(Map<String, String> queryParams, Map<String, String> modifiedDetails) throws Exception;
@@ -41,7 +49,7 @@ src/com/beans/UtilityInterface.java
    public BasicDBObject getAddBugInfoDBObject() throws Exception;
 
 
-MongoDriver class to talk with MondoDB remote connection (Mongolab).
+MongoDriver class to talk with MongoDB remote connection (Mongolab).
 src/com/datalayer/MongoDriver.java
    public String insertNewBug(BasicDBObject newBug);
    public int updateBug(BasicDBObject[] updateQueryDBObject);
@@ -50,5 +58,5 @@ src/com/datalayer/MongoDriver.java
    public void setUri(String connectionString);
    public void setcollection(String collectionName);
    public void cleanUpResources();
-
+```
 
