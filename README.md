@@ -34,7 +34,7 @@ src/com/controllers/BugContoller.java
   public String getAddBugInfo()
 
 
-Utility class to create DBObjects, retrieve data from DBCursors (DBObject, DBCUrsors:-Only language understood by MongoDB)
+Utility class to create DBObjects, retrieve data from DBCursor (DBObject, DBCursor:- Only language understood by MongoDB)
 src/com/beans/UtilityInterface.java
    public BasicDBObject getAddBugDBObject(Map<String, String> bugDetails) throws Exception;
    public BasicDBObject[] getUpdateBugDBObject(Map<String, String> queryParams, Map<String, String> modifiedDetails) throws Exception;
@@ -49,8 +49,8 @@ src/com/beans/UtilityInterface.java
    public BasicDBObject getAddBugInfoDBObject() throws Exception;
 
 
-MongoDriver class to talk with MongoDB remote connection (Mongolab).
-src/com/datalayer/MongoDriver.java
+MongoDriver class to talk with MongoDB remote connection - Mongolab.
+src/com/datalayer/MongoDriverInterface.java
    public String insertNewBug(BasicDBObject newBug);
    public int updateBug(BasicDBObject[] updateQueryDBObject);
    public DBCursor getBugDetails(BasicDBObject searchBugParams);
