@@ -1,5 +1,5 @@
 # Ticket-Management-System
-Ticket-Management-System is a Single Page application developed by using Open source technologies AngularJS (UI-router module), Java, Spring Framework, REST Web Services and NoSQL:MongoDB (mongolab). 
+Ticket-Management-System is a Single Page application developed by using Open source technologies **AngularJS (UI-router module), Java, Spring Framework, REST Web Services and NoSQL:MongoDB (mongolab).** 
 
 This application can be used by any software team to keep track of the Bugs/Tickets that might arise in the application. Each new Bug will be assigned to a particular Project and a Team member who will be responsible to update the status of the Bug between New/Resolved in DEV/Pushed to Staging/Testing/Closed/Reopened.
 
