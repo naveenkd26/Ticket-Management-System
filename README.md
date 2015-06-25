@@ -58,6 +58,9 @@ src/com/datalayer/MongoDriverInterface.java
    public void setUri(String connectionString);
    public void setcollection(String collectionName);
    public void cleanUpResources();
+   
+AngularJS functionality
+src/WebContent/Scripts/index.js
 ```
 
 ####Work in progress
