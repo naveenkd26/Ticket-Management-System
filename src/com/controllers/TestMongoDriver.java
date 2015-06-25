@@ -257,7 +257,7 @@ public class TestMongoDriver {
 			
 			BasicDBObject obj = new BasicDBObject();
 			obj.put("_id", "addBugInfo");
-			obj.put("nextAvailBugId", 1700);
+			obj.put("nextAvailBugId", 1710);
 			obj.put("project", new ArrayList());
 			obj.put("category", new ArrayList());
 			obj.put("priority", new ArrayList());

@@ -4,7 +4,7 @@
 	var myApp = angular.module('ticketSystemApp', ["ui.router"]);
 		
 	var DEV_ENV = 'http://localhost:8080/TicketSystem/rest/bugAPI/';
-	var PROD_ENV = 'http://naveenjavaapplications-ticketsystem.rhcloud.com/TicketSystem/rest/bugAPI/';
+	var PROD_ENV = 'http://naveenjavaapps-ticketsystem.rhcloud.com/TicketSystem/rest/bugAPI/';
 	var ENV = PROD_ENV;
 	
 	$(window).load(function() {

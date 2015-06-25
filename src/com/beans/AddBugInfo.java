@@ -8,7 +8,7 @@ public class AddBugInfo {
 	}
 	
 	public String _id;
-	public Double nextAvailBugId;
+	public int nextAvailBugId;
 	public ArrayList<String> project;
 	public ArrayList<String> category;
 	public ArrayList<String> priority;
