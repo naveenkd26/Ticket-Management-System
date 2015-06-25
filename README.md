@@ -17,13 +17,38 @@ Glimpse about implementation
 
 REST API implementation
 src/com/controllers/BugContoller.java
-public String addBug(@PathParam("bugDetails") String bugParams)
-public String getBugList()
-public String getBugDetails(@PathParam("bugParams") String searchParams)
-public String updateBugDetails(@PathParam("modifiedParams") String modifiedBugDetails)
-public String getNextAvailableBugId()
-public String incrementBugSequence()
-public String addAdminOption(@PathParam("newAdminOption") String newAdminOption)
-public String getAddBugInfo()
+  public String addBug(@PathParam("bugDetails") String bugParams)
+  public String getBugList()
+  public String getBugDetails(@PathParam("bugParams") String searchParams)
+  public String updateBugDetails(@PathParam("modifiedParams") String modifiedBugDetails)
+  public String getNextAvailableBugId()
+  public String incrementBugSequence()
+  public String addAdminOption(@PathParam("newAdminOption") String newAdminOption)
+  public String getAddBugInfo()
+
+Utility class to create DBObjects (Only language understood by MongoDB)
+src/com/beans/UtilityInterface.java
+   public BasicDBObject getAddBugDBObject(Map<String, String> bugDetails) throws Exception;
+   public BasicDBObject[] getUpdateBugDBObject(Map<String, String> queryParams, Map<String, String> modifiedDetails) throws Exception;
+   public List<Bug> getBugObjectsListFromDBCursor(ApplicationContext context, DBCursor dbCursor) throws Exception;
+   public BasicDBObject getFindBugDBObject(Map<String, String> searchParams) throws Exception;
+   public Map<String, String> getHashMapFromJSON(String jsonData) throws Exception;
+   public String getAvailableBugIDFromDBCursor(DBCursor cur) throws Exception;
+   public BasicDBObject getBugIDDBObject() throws Exception;
+   public BasicDBObject[] getIncrementBugSeqDBObject() throws Exception;
+   public BasicDBObject[] getAddAdminOptionDBObject(String optionName, String value) throws Exception;
+   public AddBugInfo getAddBugInfoObjectFromDBCursor(ApplicationContext context, DBCursor dbCursor) throws Exception;
+   public BasicDBObject getAddBugInfoDBObject() throws Exception;
+
+
+MongoDriver class to talk with MondoDB remote connection (Mongolab).
+src/com/datalayer/MongoDriver.java
+   public String insertNewBug(BasicDBObject newBug);
+   public int updateBug(BasicDBObject[] updateQueryDBObject);
+   public DBCursor getBugDetails(BasicDBObject searchBugParams);
+   public DBCursor getBugList();
+   public void setUri(String connectionString);
+   public void setcollection(String collectionName);
+   public void cleanUpResources();
 
 
