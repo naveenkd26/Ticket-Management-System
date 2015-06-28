@@ -65,7 +65,4 @@ AngularJS functionality
 src/WebContent/Scripts/index.js
 ```
 
-####Work in progress - Completed as of 06/28/2015
-1. Validitation for blank options before adding new option in Admin section.
-2. Check whether or not the new option for Project/Category/Priority/Team member/Status already exists before adding saving it to MongoDB.
 
