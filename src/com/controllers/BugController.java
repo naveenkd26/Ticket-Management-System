@@ -46,25 +46,24 @@ public class BugController {
 	//Returns    : Returns status message of the insert query.
 	@POST
 	@Path("/addbug/{bugDetails}")
-    @Produces(MediaType.TEXT_PLAIN)
+        @Produces(MediaType.TEXT_PLAIN)
 	public String addBug(@PathParam("bugDetails") String bugParams){
 		
-		System.out.println("THis is in add bug controller");
 				
 		utilObj = (UtilityInterface)context.getBean("utilityBean");		
 		mongoDriver = (MongoDriverInterface)context.getBean("mongoDriverBean");
-        Map<String, String> bugDetails = new HashMap<String, String>();
-        BasicDBObject mongoQueryObj;
+                Map<String, String> bugDetails = new HashMap<String, String>();
+                BasicDBObject mongoQueryObj;
         
 		try{
 		
-	        //Getting a HashMap for the bug details received in JSON format.
+	                //Getting a HashMap for the bug details received in JSON format.
 			bugDetails = utilObj.getHashMapFromJSON(bugParams);			
 			
 			//Creating a Mongo DBObject(Only format accepted by mongodb) from the bugDetails HashMap.
 			mongoQueryObj = utilObj.getAddBugDBObject(bugDetails); 
         		
-		   //Executing the insert query and returning the response received from mongoDB.	   
+		        //Executing the insert query and returning the response received from mongoDB.	   
 			String resp = mongoDriver.insertNewBug(mongoQueryObj);
 			System.out.println("Insert query status  " + resp);
 			
@@ -73,7 +72,7 @@ public class BugController {
 			//Getting the MongoDB Object(Only format accepted by mongoDB) for incrementing the bug sequence.
 			BasicDBObject[] queryObj = utilObj.getIncrementBugSeqDBObject();
 			  
-            //Executing the query to increment bug sequence.
+                        //Executing the query to increment bug sequence.
 			int n = mongoDriver.updateBug(queryObj);
 			System.out.println("Inceremented rows  " + n);
 			
@@ -97,7 +96,7 @@ public class BugController {
 	//Returns    : Returns the list of bugs present in the the database.
 	@GET
 	@Path("/getbuglist")
-    @Produces(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
 	public String getBugList(){
 		
 		//System.out.println("This is in getBugList controller");	
@@ -112,7 +111,7 @@ public class BugController {
 			  //Querying all the bugs present in the mongoDB.
 			  cur = mongoDriver.getBugList();
 			  
-		      //Converting the DBCursor(returned by mongoDB) to list of Bug objects.
+		          //Converting the DBCursor(returned by mongoDB) to list of Bug objects.
 			  bugList = utilObj.getBugObjectsListFromDBCursor(context, cur);
 		      
 		}catch(Exception e){
@@ -130,25 +129,25 @@ public class BugController {
 	//Returns    : Returns the details of the bug for which the user wants to update.  
 	@GET
 	@Path("/getbugdetails/{bugParams}")
-    @Produces(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
 	public String getBugDetails(@PathParam("bugParams") String searchParams){
 		
-		List<Bug> bugList;
+	    List<Bug> bugList;
 	    DBCursor cur;
 	    Map<String, String> findBugMap;
 	    gson = new Gson();
 	    BasicDBObject queryObj;
 	    AddBugInfo bugOptions;
-		utilObj = (UtilityInterface)context.getBean("utilityBean");		
-		mongoDriver = (MongoDriverInterface)context.getBean("mongoDriverBean");
-		BugDetails bugDetails = (BugDetails)context.getBean("bugDetailsBean");
+	    utilObj = (UtilityInterface)context.getBean("utilityBean");		
+	    mongoDriver = (MongoDriverInterface)context.getBean("mongoDriverBean");
+	    BugDetails bugDetails = (BugDetails)context.getBean("bugDetailsBean");
 		
       try{
 	
     	  //Getting a HashMap out of the search parameters.
     	  findBugMap = utilObj.getHashMapFromJSON(searchParams); 	
     	     	          
-		  //Creating a MongoDBObject(Only format accepted by mongoDB) from the findBugMap.
+    	  //Creating a MongoDBObject(Only format accepted by mongoDB) from the findBugMap.
     	  BasicDBObject mongoQueryObj = utilObj.getFindBugDBObject(findBugMap);
     	  
     	  //Querying the bug details by passing the queryObj to mongoDB which contains the search parameters.
@@ -156,15 +155,15 @@ public class BugController {
          
           //Converting the DBCursor(returned by mongoDB) to list of Bug objects.
           bugList = utilObj.getBugObjectsListFromDBCursor(context, cur);
-         
-		  //Getting the MongoDB Object(Only format accepted by mongoDB) for retrieving the details
-		  //about Available bug id, project, category, priority, team and status.
-		  queryObj = utilObj.getAddBugInfoDBObject();
+           
+          //Getting the MongoDB Object(Only format accepted by mongoDB) for retrieving the details
+          //about Available bug id, project, category, priority, team and status.
+          queryObj = utilObj.getAddBugInfoDBObject();
 		  
           //Executing the query.
-		  cur = mongoDriver.getBugDetails(queryObj);
+          cur = mongoDriver.getBugDetails(queryObj);
 		  
-		  bugOptions = utilObj.getAddBugInfoObjectFromDBCursor(context, cur);
+          bugOptions = utilObj.getAddBugInfoObjectFromDBCursor(context, cur);
          
           bugDetails.setBugDetails(bugList);
           bugDetails.setAddBugInfo(bugOptions);
@@ -183,10 +182,10 @@ public class BugController {
 	//Returns    : Returns the status of the update operation performed in the mongoDB.
 	@PUT
 	@Path("/updatebug/{modifiedParams}")
-    @Produces(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
 	public String updateBugDetails(@PathParam("modifiedParams") String modifiedBugDetails){
 
-	    int status;
+	        int status;
 		Map<String, String> modDetailsMap;
 		Map<String, String> searchParamsMap = new HashMap<String, String>();
 	    
@@ -199,7 +198,7 @@ public class BugController {
     	  modDetailsMap = utilObj.getHashMapFromJSON(modifiedBugDetails); 	
     	  searchParamsMap.put("bugId", modDetailsMap.get("bugId") );
     	  
-		  //Creating MongoDBObjects(Only format accepted by mongoDB) for modified parameters and search params. 	  
+          //Creating MongoDBObjects(Only format accepted by mongoDB) for modified parameters and search params. 	  
     	  BasicDBObject[] updateQueryDBObject = utilObj.getUpdateBugDBObject(searchParamsMap, modDetailsMap);
     	  
     	  //Executing the update query.
@@ -220,7 +219,7 @@ public class BugController {
 	//             for the new Bug the user want to add.
 	@GET
 	@Path("/getNextAvailableBugId")
-    @Produces(MediaType.TEXT_HTML)
+        @Produces(MediaType.TEXT_HTML)
 	public String getNextAvailableBugId(){
 		
 		//System.out.println("This is in getNextAvailableBugId controller");	
@@ -229,11 +228,11 @@ public class BugController {
 		DBCursor cur;
 		
 		try{
-			  //Getting the MongoDB Object(Only format accepted by mongoDB) for requesting the next available Bug Id.
-			  BasicDBObject queryObj = utilObj.getBugIDDBObject();
+		       //Getting the MongoDB Object(Only format accepted by mongoDB) for requesting the next available Bug Id.
+		       BasicDBObject queryObj = utilObj.getBugIDDBObject();
 			  
-              //Executing the query to pull the net available Bug Id.
-			  cur = mongoDriver.getBugDetails(queryObj);
+                       //Executing the query to pull the net available Bug Id.
+		       cur = mongoDriver.getBugDetails(queryObj);
 			
 		      //Pulling the bugId from the DBCursor and returning it to the client.
 		      return utilObj.getAvailableBugIDFromDBCursor(cur);		  
@@ -252,7 +251,7 @@ public class BugController {
 	//Returns    : Returns status of the update query.
 	@PUT
 	@Path("/incrementBugSequence")
-    @Produces(MediaType.TEXT_HTML)
+        @Produces(MediaType.TEXT_HTML)
 	public String incrementBugSequence(){
 		
 		//System.out.println("This is in getNextAvailableBugId controller");	
@@ -260,11 +259,11 @@ public class BugController {
 		mongoDriver = (MongoDriverInterface)context.getBean("mongoDriverBean");
 		
 		try{
-			  //Getting the MongoDB Object(Only format accepted by mongoDB) for incrementing the bug sequence.
-			  BasicDBObject[] queryObj = utilObj.getIncrementBugSeqDBObject();
+	              //Getting the MongoDB Object(Only format accepted by mongoDB) for incrementing the bug sequence.
+	              BasicDBObject[] queryObj = utilObj.getIncrementBugSeqDBObject();
 			  
-              //Executing the query to increment bug sequence.
-			  int n = mongoDriver.updateBug(queryObj);
+                      //Executing the query to increment bug sequence.
+	              int n = mongoDriver.updateBug(queryObj);
 			
 		      if(n == 1)
 		    	  return "success";
@@ -297,14 +296,12 @@ public class BugController {
 				  //Getting the MongoDB Object(Only format accepted by mongoDB) for incrementing the bug sequence.
 				  queryObj = utilObj.getAddAdminOptionDBObject(newAdminOption.substring(2, j = newAdminOption.indexOf("\"", 2)), newAdminOption.substring( (k= newAdminOption.indexOf("\"", j+1)) + 1, newAdminOption.indexOf("\"", k+1)));
 				  
-	              //Executing the query to increment bug sequence.
+	                          //Executing the query to increment bug sequence.
 				  int n = mongoDriver.updateBug(queryObj);
-				  
-				  System.out.println("Adding new admin option status : " + n);
 				
-			      if(n == 1)
+			         if(n == 1)
 			    	  return "success";
-			      else
+			         else
 			    	  return "failure" ;
 			      
 			}catch(Exception e){
@@ -320,7 +317,7 @@ public class BugController {
 			//Returns    : Returns status of the insert query.
 			@GET
 			@Path("/getAddBugInfo")
-		    @Produces(MediaType.APPLICATION_JSON)
+		        @Produces(MediaType.APPLICATION_JSON)
 			public String addAdminOption(){
 				
     			BasicDBObject queryObj;
@@ -332,12 +329,12 @@ public class BugController {
 					  //about Available bug id, project, category, priority, team and status.
 					  queryObj = utilObj.getAddBugInfoDBObject();
 					  
-		              //Executing the query.
+		                          //Executing the query.
 					  DBCursor cur = mongoDriver.getBugDetails(queryObj);
 					  
 					  AddBugInfo infoBug = utilObj.getAddBugInfoObjectFromDBCursor(context, cur);
 
-                      //Returning the details in JSON format.
+                                          //Returning the details in JSON format.
 					  return new Gson().toJson(infoBug);
 				      
 				}catch(Exception e){
