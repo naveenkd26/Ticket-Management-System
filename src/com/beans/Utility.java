@@ -40,7 +40,7 @@ public class Utility implements UtilityInterface{
 		
 		return obj;
 	}
-    //
+        //
 	//
 	//
 	//Function Name: getUpdateBugDBObject(Map<String, String> queryParams, Map<String, String> modifiedDetails)
@@ -96,7 +96,7 @@ public class Utility implements UtilityInterface{
 		//Getting new Bug Object through Spring.
 		Bug bugObj = (Bug)context.getBean("newBugBean");
 			
-        //Adding the retrieved details to the new bug object using Java Reflection API.	
+                //Adding the retrieved details to the new bug object using Java Reflection API.	
 		Field[] fields = bugObj.getClass().getDeclaredFields();	
 		
 		try{		
@@ -255,8 +255,6 @@ public class Utility implements UtilityInterface{
 	//
 	//
 	//
-
-
 }
 
 
